@@ -3,10 +3,13 @@
 namespace Netzmacht\Tapatalk\Api;
 
 
+use Netzmacht\Tapatalk\Api\Account\Alert;
 use Netzmacht\Tapatalk\Api\Exception\InvalidResponseException;
 use Netzmacht\Tapatalk\Api;
+use Netzmacht\Tapatalk\Result;
 use Netzmacht\Tapatalk\Transport;
 use Netzmacht\Tapatalk\Transport\MethodCallResponse;
+use Netzmacht\Tapatalk\Util\Pagination;
 
 class Account extends Api
 {
@@ -198,6 +201,51 @@ class Account extends Api
 		$this->lazyCallInboxStat();
 
 		return $this->unreadTopics;
+	}
+
+
+	/**
+	 * @param bool $markAllAlertsAsRead
+	 * @return static
+	 */
+	public function getDashboard($markAllAlertsAsRead=false)
+	{
+		$params = array();
+		$params['alert_mark_read'] = $markAllAlertsAsRead;
+
+		if($markAllAlertsAsRead) {
+
+		}
+
+		$response = $this->transport->call('get_dashboard', $params);
+		$this->assert()->noResultState($response);
+
+		return Account\Dashboard::fromResponse($response);
+	}
+
+
+	/**
+	 * @param int $limit
+	 * @param int $offset
+	 * @return Result|\Netzmacht\Tapatalk\Api\Account\Alert[]
+	 */
+	public function getAlerts($limit=20, $offset=0)
+	{
+		$params = array(
+			'page'    => Pagination::getPage($limit, $offset),
+			'perpage' => $limit
+		);
+
+		$response = $this->transport->call('get_alert', $params);
+		$this->assert()->noResultState($response);
+
+		$alerts = array();
+
+		foreach($response->get('items') as $alert) {
+			$alerts[] = Alert::fromResponse($alert);
+		}
+
+		return new Result($alerts, $response->get('total'), $offset);
 	}
 
 
