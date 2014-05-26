@@ -252,12 +252,10 @@ class Posts extends Api
 	 */
 	public function thankForPost($postId)
 	{
-		//$this->assert()->pushTypeIsEnabled(Config::PUSH_THANK);
+		$this->assert()->pushTypeIsEnabled(Config::PUSH_THANK);
 
 		$response = $this->transport->call('thank_post', array('post_id' => (string) $postId));
 		$this->assert()->resultSuccess($response);
-
-		var_dump($response->get('result_text', true));
 	}
 
 
