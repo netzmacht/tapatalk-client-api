@@ -205,23 +205,8 @@ class Posts extends Api
 	 */
 	public function advancedSearch(array $filters, $limit=20, $offset=20, $searchId=null)
 	{
-		$method = $this->transport->createMethodCall('search');
-
-		$applyFilters = array(
-			'showposts' => 1,
-			'page'      => Pagination::getPage($limit, $offset),
-			'perpage'   => $limit
-		);
-
-		if($searchId) {
-			$applyFilters['searchid'] = $searchId;
-		}
-
-		$method->set('filters', $applyFilters);
-
-		if(!$searchId) {
-			AdvancedSearch::applyFilters($method, $filters);
-		}
+		$method = $this->transport->createMethodCall('search', array('filters' => array('showposts' => 1)));
+		AdvancedSearch::applyFilters($method, $filters, $limit, $offset, $searchId);
 
 		$response = $method->call();
 		$this->assert()->noResultState($response);
