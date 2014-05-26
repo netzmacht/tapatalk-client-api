@@ -15,6 +15,8 @@ use Netzmacht\Tapatalk\Util\Pagination;
 class Board extends Api
 {
 	/**
+	 * Get ids from given forum url
+	 *
 	 * @see http://tapatalk.com/api/api_section.php?id=1#get_id_by_url
 	 * @param $url
 	 * @return Ids
@@ -29,6 +31,8 @@ class Board extends Api
 
 
 	/**
+	 * Get board statistics
+	 *
 	 * @see http://tapatalk.com/api/api_section.php?id=1#get_board_stat
 	 * @return Statistics
 	 */
@@ -41,6 +45,8 @@ class Board extends Api
 	}
 
 	/**
+	 * Get all smilies
+	 *
 	 * @see http://tapatalk.com/api/api_section.php?id=1#get_smilies
 	 * @return Smilies
 	 */
@@ -54,6 +60,9 @@ class Board extends Api
 
 
 	/**
+	 * Get all activities happened
+	 *
+	 * @see http://tapatalk.com/api/api_section.php?id=9#get_activity
 	 * @param int $limit
 	 * @param int $offset
 	 * @return Result
