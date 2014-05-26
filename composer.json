@@ -1,5 +1,5 @@
 {
-    "name": "netzmacht/tapatalk-client",
+    "name": "netzmacht/tapatalk-client-api",
     "license": "MIT",
     "type": "library",
     "description": "Tapatalk client library",

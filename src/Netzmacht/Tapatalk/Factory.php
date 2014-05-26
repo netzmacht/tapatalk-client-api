@@ -34,7 +34,7 @@ class Factory
 	 * @param null $password
 	 * @return \Netzmacht\Tapatalk\Client
 	 */
-	public static function forBoard($uri, $username=null, $password=null)
+	public static function connect($uri, $username=null, $password=null)
 	{
 		/** @var Factory $factory */
 		$factory = new Factory();

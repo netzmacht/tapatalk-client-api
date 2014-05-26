@@ -232,6 +232,7 @@ class Posts extends Api
 		return $result;
 	}
 
+
 	/**
 	 * @param $postId
 	 * @param bool $like
@@ -306,6 +307,7 @@ class Posts extends Api
 		$response = $method->call();
 		$this->assert()->featureSupported($response);
 	}
+
 
 	/**
 	 * @param array $result
