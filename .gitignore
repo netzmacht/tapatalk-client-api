@@ -1,0 +1,4 @@
+/vendor/
+/composer.phar
+/web/
+/bin/phpspec

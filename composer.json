@@ -1,0 +1,22 @@
+{
+    "name": "netzmacht/tapatalk-client",
+    "license": "MIT",
+    "type": "library",
+    "description": "Tapatalk client library",
+    "autoload": {
+        "psr-0": { "": "src/" }
+    },
+    "require": {
+        "php": ">=5.4.0",
+        "lstrojny/fxmlrpc": "0.9.2",
+        "guzzle/guzzle": "~3.8"
+    },
+    "require-dev": {
+        "phpspec/phpspec": "2.0.*@dev"
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "extra": {
+    }
+}

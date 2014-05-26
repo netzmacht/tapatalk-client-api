@@ -1,0 +1,328 @@
+<?php
+
+namespace Netzmacht\Tapatalk\Api;
+
+use Netzmacht\Tapatalk\Api\Topics\SearchTopicPost;
+use Netzmacht\Tapatalk\Api\Topics\SubscribedTopic;
+use Netzmacht\Tapatalk\Api\Topics\Topic;
+use Netzmacht\Tapatalk\Api\Topics\TopicPost;
+use Netzmacht\Tapatalk\Api\Topics\TopicResult;
+use Netzmacht\Tapatalk\Api\Topics\TopicPostResult;
+use Netzmacht\Tapatalk\Api\Topics\TopicStatus;
+use Netzmacht\Tapatalk\Api;
+use Netzmacht\Tapatalk\Exception\NotImplementedException;
+use Netzmacht\Tapatalk\Result;
+use Netzmacht\Tapatalk\Transport;
+
+
+/**
+ * Class Topics
+ * @package Netzmacht\Tapatalk\Api
+ */
+class Topics extends Api
+{
+
+	const SUBSCRIBE = 'subscribe_topic';
+	const UNSUBSCRIBE = 'unsubscribe_topic';
+
+	const LIST_STICKY        = 'TOP';
+	const LIST_ANNOUNCEMENTS = 'ANN';
+
+	const STATE_PUBLISHED = 'published';
+	const STATE_MOD_PUBLISHING_REQUIRED = 'moderator';
+
+
+	/**
+	 * List all topics of a forum. Mode can be used to get only sticky topics or announcements
+	 *
+	 * @see http://tapatalk.com/api/api_section.php?id=3#get_topic
+	 * @param $forumId
+	 * @param int $limit
+	 * @param int $offset
+	 * @param null $mode
+	 * @return Topic[]|TopicResult
+	 */
+	public function getTopics($forumId, $limit=50, $offset=0, $mode=null)
+	{
+		$this->assertValidListMode($mode);
+
+		$request = $this->transport->createMethodCall('get_topic')
+			->set('forum_id', (string) $forumId)
+			->set('start_num', $offset)
+			->set('last_num', $offset+$limit-1);
+
+		if($mode) {
+			$request->set('mode', $mode);
+		}
+
+		$response = $request->call();
+		$this->assert()->noResultState($response);
+
+		return TopicResult::fromResponse($response, $offset);
+	}
+
+
+	/**
+	 * List all unread topics. The result will be a combination of latest post in topic an the topic itself.
+	 *
+	 * @see http://tapatalk.com/api/api_section.php?id=3#get_unread_topic
+	 * @param int $limit
+	 * @param int $offset
+	 * @param null $searchId
+	 * @param null $filters
+	 * @return TopicPostResult|TopicPost[]
+	 */
+	public function getUnreadTopicPosts($limit=50, $offset=0, $searchId=null, $filters=null)
+	{
+		return $this->queryTopicPosts('get_unread_topic', $limit, $offset, $searchId, $filters);
+	}
+
+
+	/**
+	 * List all latest topics. The result will be a combination of latest post in topic an the topic itself.
+	 *
+	 * @see http://tapatalk.com/api/api_section.php?id=3#get_latest_topic
+	 * @param int $limit
+	 * @param int $offset
+	 * @param null $searchId
+	 * @param null $filters
+	 * @return TopicPostResult|TopicPost[]
+	 */
+	public function getLatestTopics($limit=50, $offset=0, $searchId=null, $filters=null)
+	{
+		return $this->queryTopicPosts('get_latest_topic', $limit, $offset, $searchId, $filters);
+	}
+
+
+	/**
+	 *
+	 * @param array $topicIds
+	 * @return Result|TopicStatus[]
+	 */
+	public function getStatuses(array $topicIds)
+	{
+		$topicIds = array_map('strval', $topicIds);
+
+		$statuses = array();
+		$response = $this->transport->call('get_topic_status', array('topic_id_array' => $topicIds));
+		$this->assert()->resultSuccess($response);
+
+		foreach($response->get('status') as $status) {
+			$statuses[] = TopicStatus::fromResponse($status);
+		}
+
+		return new Result($statuses);
+	}
+
+
+	/**
+	 * List all subscribed topics
+	 *
+	 * @see http://tapatalk.com/api/api_section.php?id=6#get_subscribed_topic
+	 * @param int $limit
+	 * @param int $offset
+	 * @return Result|SubscribedTopic[]
+	 */
+	public function getSubscribed($limit=50, $offset=0)
+	{
+		$response = $this->transport->call('get_subscribed_topic', array(
+				'start_num' => $offset,
+				'last_num'  => $limit+$offset-1
+			));
+
+		$this->assert()->noResultState($response);
+		$topics = array();
+
+		foreach($response->get('topics') as $topic) {
+			$topics[] = SubscribedTopic::fromResponse($topic);
+		}
+
+		return new Result($topics, $response->get('total_topic_num'), $offset);
+	}
+
+
+	/**
+	 * @param $topicId
+	 * @param string $mode
+	 */
+	public function subscribeTopic($topicId, $mode=Topics::SUBSCRIBE)
+	{
+		$this->assertValidSubscribeMode($mode);
+
+		$response = $this->transport->call($mode, array('topic_id' => (string) $topicId));
+		$this->assert()->resultSuccess($response);
+	}
+
+	/**
+	 * Mark given topics as read
+	 * @param array $topicIds
+	 */
+	public function markTopicsAsRead(array $topicIds)
+	{
+		$topicIds = array_map('strval', $topicIds);
+
+		$response = $this->transport->call('mark_topic_read', array('topic_id_array' => $topicIds));
+		$this->assert()->resultSuccess($response);
+	}
+
+
+	/**
+	 * Create a new topic. Return an array with topic id and current publishing state.
+	 *
+	 * @see http://tapatalk.com/api/api_section.php?id=3#new_topic
+	 * @param $forumId
+	 * @param $subject
+	 * @param $body
+	 * @param null $prefixId
+	 * @param array $attachmentIds
+	 * @param null $groupId
+	 * @return array
+	 */
+	public function createNewTopic($forumId, $subject, $body, $prefixId=null, array $attachmentIds=null, $groupId=null)
+	{
+		$request = $this->transport->createMethodCall('new_topic')
+			->set('forum_id', (string) $forumId)
+			->set('subject', $subject, true)
+			->set('body', $body, true);
+
+		if($prefixId || $attachmentIds) {
+			$request->set('prefix_id', (string) $prefixId);
+		}
+
+		if($attachmentIds) {
+			$request->set('attachment_id_array', array_map('strval', $attachmentIds));
+			$request->set('group_id', (string) $groupId);
+		}
+
+		$response = $request->call();
+		$this->assert()->resultSuccess($response);
+
+		return array(
+			'topicId' => $response->get('topic_id'),
+			'state'   => $response->get('state' ? static::STATE_MOD_PUBLISHING_REQUIRED : static::STATE_PUBLISHED)
+		);
+	}
+
+
+	/**
+	 * @param $keywords
+	 * @param int $limit
+	 * @param int $offset
+	 * @param null $searchId
+	 * @return Result|TopicPost[]
+	 */
+	public function search($keywords, $limit=20, $offset=0, $searchId=null)
+	{
+		$request = $this->transport->createMethodCall('search_topic')
+			->set('search_string', $keywords, true)
+			->set('start_num', $offset)
+			->set('last_num', $limit+$offset-1);
+
+		if($searchId) {
+			$request->set('search_id', (string) $searchId);
+		}
+
+		$response = $request->call();
+		$this->assert()->noResultState($response);
+
+		$topics = array();
+
+		foreach($response->get('topics') as $topic) {
+			$topics[] = SearchTopicPost::fromResponse($topic);
+		}
+
+		return new Result($topics, $response->get('total_topic_num'), $offset);
+	}
+
+
+	/**
+	 * @throws \Netzmacht\Tapatalk\Exception\NotImplementedException
+	 */
+	public function advancedSearch()
+	{
+		throw new NotImplementedException('Advanced search is not implemented yet');
+	}
+
+
+	/**
+	 * @param $method
+	 * @param $limit
+	 * @param $offset
+	 * @param $searchId
+	 * @param $filters
+	 * @return TopicPostResult
+	 */
+	private function queryTopicPosts($method, $limit, $offset, $searchId, $filters)
+	{
+		$params = array(
+			'start_num' => $offset,
+			'last_num'  => $limit + $offset - 1,
+		);
+
+		if($searchId || $filters) {
+			$params['search_id'] = (string) $searchId;
+		}
+
+		$params   = $this->appendFilters($params, $filters);
+		$response = $this->transport->call($method, $params);
+
+		$this->assert()->resultSuccess($response);
+
+		return TopicPostResult::fromResponse($response, $offset);
+	}
+
+
+	/**
+	 * @param $mode
+	 * @throws \InvalidArgumentException
+	 */
+	private function assertValidListMode($mode)
+	{
+		if($mode !== null && $mode != static::LIST_ANNOUNCEMENTS && $mode != static::LIST_STICKY) {
+			throw new \InvalidArgumentException('Invalid list topic mode given: ' . $mode);
+		}
+	}
+
+	/**
+	 * @param $name
+	 * @throws \InvalidArgumentException
+	 */
+	private function assertValidFilterName($name)
+	{
+		if($name != 'only_in' && $name != 'not_in') {
+			throw new \InvalidArgumentException('Invalid filter name given: ' . $name);
+		}
+	}
+
+	/**
+	 * @param $params
+	 * @param $filters
+	 */
+	private function appendFilters($params, $filters)
+	{
+		if(is_array($filters) && !empty($filters)) {
+			$compiled = array();
+			foreach($filters as $name => $ids) {
+				$this->assertValidFilterName($name);
+				$compiled[$name] = (array) $ids;
+			}
+
+			$params['filters'] = $compiled;
+		}
+
+		return $params;
+	}
+
+
+	/**
+	 * @param $mode
+	 * @throws \InvalidArgumentException
+	 */
+	private function assertValidSubscribeMode($mode)
+	{
+		if($mode != static::SUBSCRIBE && $mode != static::UNSUBSCRIBE) {
+			throw new \InvalidArgumentException('Invalid subscribe mode given: ' . $mode);
+		}
+	}
+
+}
