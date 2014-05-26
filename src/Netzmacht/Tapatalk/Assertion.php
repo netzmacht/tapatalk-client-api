@@ -2,26 +2,28 @@
 
 namespace Netzmacht\Tapatalk;
 
+use Netzmacht\Tapatalk\Api\Config;
 use Netzmacht\Tapatalk\Api\Exception\PermissionDeniedException;
 use Netzmacht\Tapatalk\Api\Exception\ResponseException;
 use Netzmacht\Tapatalk\Api\Exception\UnsupportedFeatureException;
+use Netzmacht\Tapatalk\Exception\Api\DisabledPushTypeException;
 use Netzmacht\Tapatalk\Client;
 use Netzmacht\Tapatalk\Transport\MethodCallResponse;
 
 class Assertion
 {
 	/**
-	 * @var Client
+	 * @var Config
 	 */
-	private $client;
+	private $config;
 
 
 	/**
-	 * @param $client
+	 * @param $config
 	 */
-	function __construct($client)
+	function __construct($config)
 	{
-		$this->client = $client;
+		$this->config = $config;
 	}
 
 
@@ -53,7 +55,7 @@ class Assertion
 	 */
 	public function featureSupported($feature)
 	{
-		if(!$this->client->config()->isSupported($feature)) {
+		if(!$this->config->isSupported($feature)) {
 			throw new UnsupportedFeatureException('Board does not support feature: ' . $feature);
 		}
 	}
@@ -65,7 +67,7 @@ class Assertion
 	 */
 	public function hasPermission($permission)
 	{
-		if(!$this->client->config()->hasPermission($permission)) {
+		if(!$this->config->hasPermission($permission)) {
 			throw new PermissionDeniedException('Permission "' . $permission . '" not granted');
 		}
 	}
@@ -83,6 +85,13 @@ class Assertion
 		}
 		else {
 			throw new ResponseException($message);
+		}
+	}
+
+	public function pushTypeIsEnabled($type)
+	{
+		if(!$this->config->isPushTypeEnabled($type)) {
+			throw new DisabledPushTypeException('Push type "' . $type . ' " is not enabled.');
 		}
 	}
 

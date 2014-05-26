@@ -9,7 +9,11 @@ use Netzmacht\Tapatalk\Api\Posts\PostQuote;
 use Netzmacht\Tapatalk\Api\Posts\PostResult;
 use Netzmacht\Tapatalk\Api;
 use Netzmacht\Tapatalk\Api\Posts\RawPost;
+use Netzmacht\Tapatalk\Api\Posts\SearchPost;
+use Netzmacht\Tapatalk\Api\Search\AdvancedSearch;
+use Netzmacht\Tapatalk\Api\Search\SearchResult;
 use Netzmacht\Tapatalk\Transport;
+use Netzmacht\Tapatalk\Util\Pagination;
 
 
 class Posts extends Api
@@ -38,6 +42,7 @@ class Posts extends Api
 		);
 
 		$response = $this->transport->call('get_thread', $params);
+		$this->assert()->noResultState($response);
 		$this->assert()->noResultState($response);
 
 		return PostResult::fromResponse($response);
@@ -168,6 +173,7 @@ class Posts extends Api
 	 * @param int $limit
 	 * @param int $offset
 	 * @param null $searchId
+	 * @return SearchResult|SearchPost[]
 	 */
 	public function search($keywords=null, $limit=20, $offset=0, $searchId=null)
 	{
@@ -183,25 +189,75 @@ class Posts extends Api
 		$response = $method->call();
 		$this->assert()->noResultState($response);
 
-		return SearchPostResult::fromResponse($response);
+		$items  = $this->createSearchResultPosts($response->get('posts'));
+		$result = new SearchResult($items, $response->get('total_post_num'), $offset, $response->get('search_id'));
+
+		return $result;
 	}
 
 
-	public function advancedSearch()
+	/**
+	 * @param array $filters
+	 * @param int $limit
+	 * @param int $offset
+	 * @param null $searchId
+	 * @return SearchResult|SearchPost[]
+	 */
+	public function advancedSearch(array $filters, $limit=20, $offset=20, $searchId=null)
 	{
+		$method = $this->transport->createMethodCall('search');
 
+		$applyFilters = array(
+			'showposts' => 1,
+			'page'      => Pagination::getPage($limit, $offset),
+			'perpage'   => $limit
+		);
+
+		if($searchId) {
+			$applyFilters['searchid'] = $searchId;
+		}
+
+		$method->set('filters', $applyFilters);
+
+		if(!$searchId) {
+			AdvancedSearch::applyFilters($method, $filters);
+		}
+
+		$response = $method->call();
+		$this->assert()->noResultState($response);
+
+		$items  = $this->createSearchResultPosts($response->get('posts'));
+		$result = new SearchResult($items, $response->get('total_post_num'), $offset, $response->get('search_id'));
+
+		return $result;
+	}
+
+	/**
+	 * @param $postId
+	 * @param bool $like
+	 */
+	public function likePost($postId, $like=true)
+	{
+		$this->assert()->pushTypeIsEnabled(Config::PUSH_LIKE);
+
+		$method = $like ? 'like_post' : 'unlike_post';
+
+		$response = $this->transport->call($method, array('post_id' => (string) $postId));
+		$this->assert()->resultSuccess($response);
 	}
 
 
-	public function likePost()
+	/**
+	 * @param $postId
+	 */
+	public function thankForPost($postId)
 	{
+		//$this->assert()->pushTypeIsEnabled(Config::PUSH_THANK);
 
-	}
+		$response = $this->transport->call('thank_post', array('post_id' => (string) $postId));
+		$this->assert()->resultSuccess($response);
 
-
-	public function thankForPost()
-	{
-
+		var_dump($response->get('result_text', true));
 	}
 
 
@@ -251,6 +307,21 @@ class Posts extends Api
 
 		$response = $method->call();
 		$this->assert()->featureSupported($response);
+	}
+
+	/**
+	 * @param array $result
+	 * @return SearchPost[]
+	 */
+	private function createSearchResultPosts($result)
+	{
+		$posts = array();
+
+		foreach($result as $post) {
+			$posts[] = SearchPost::fromResponse($post);
+		}
+
+		return $posts;
 	}
 
 } 

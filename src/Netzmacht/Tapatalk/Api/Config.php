@@ -33,6 +33,9 @@ class Config
 	const FEATURE_EMOJI                   = 'emoji_support';
 	const FEATURE_PM_CONVERSATION = 'conversation';
 	const FEATURE_GET_TOPIC_STATUS = 'get_topic_status';
+	const FEATURE_GET_PARTICIPATED_FORUM = 'get_participated_forum';
+	const FEATURE_GET_FORUM_STATUS = 'get_forum_status';
+	const FEATURE_GET_SMILIES = 'get_smilies';
 
 	const PERM_GUEST_ACCESS = 'guest_okay';
 	const PERM_GUEST_SEARCH = 'guest_search';
@@ -41,9 +44,15 @@ class Config
 	const ENCRYPTION_MD5 = 'md5';
 	const ENCRYPTION_SHA1 = 'sha1';
 
-	const FEATURE_GET_PARTICIPATED_FORUM = 'get_participated_forum';
-	const FEATURE_GET_FORUM_STATUS = 'get_forum_status';
-	const FEATURE_GET_SMILIES = 'get_smilies';
+	const PUSH_ANNOUNCMENT = 'ann';
+	const PUSH_CONVERSATION = 'conv';
+	const PUSH_PRIVATE_MESSAGE = 'pm';
+	const PUSH_LIKE = 'like';
+	const PUSH_THANK = 'thank';
+	const PUSH_QUOTE = 'quote';
+	const PUSH_NEW_TOPIC = 'newtopic';
+	const PUSH_TAG = 'tag';
+	const PUSH_SUB = 'sub'; // TODO whre it is used? Find a better name
 
 
 	private $features = array();
@@ -57,6 +66,8 @@ class Config
 	private $searchMinLength;
 	private $passwordEncryption;
 
+	private $pushTypes;
+
 	/**
 	 * @param $boardVersion
 	 * @param $tapatalkVersion
@@ -66,8 +77,9 @@ class Config
 	 * @param $permissions
 	 * @param $passwordEncryption
 	 * @param $searchMinLength
+	 * @param $pushTypes
 	 */
-	function __construct($boardVersion, $tapatalkVersion, $apiVersion, $isOpen, $features, $permissions, $passwordEncryption, $searchMinLength)
+	function __construct($boardVersion, $tapatalkVersion, $apiVersion, $isOpen, $features, $permissions, $passwordEncryption, $searchMinLength, $pushTypes)
 	{
 		$this->boardVersion       = $boardVersion;
 		$this->tapatalkVersion    = $tapatalkVersion;
@@ -77,6 +89,7 @@ class Config
 		$this->permissions        = $permissions;
 		$this->passwordEncryption = $passwordEncryption;
 		$this->searchMinLength    = $searchMinLength;
+		$this->pushTypes          = $pushTypes;
 	}
 
 
@@ -138,7 +151,8 @@ class Config
 			$features,
 			$permissions,
 			$passwordEncryption,
-			$value('min_search_length', 0)
+			$value('min_search_length', 0),
+			array_filter(explode(',', $response->get('push_type')))
 		);
 	}
 
@@ -173,6 +187,26 @@ class Config
 
 		return false;
 	}
+
+
+	/**
+	 * @param $pushType
+	 * @return bool
+	 */
+	public function isPushTypeEnabled($pushType)
+	{
+		return in_array($pushType, $this->pushTypes);
+	}
+
+
+	/**
+	 * @return mixed
+	 */
+	public function getPushTypes()
+	{
+		return $this->pushTypes;
+	}
+
 
 	/**
 	 * @return mixed

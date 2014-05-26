@@ -45,7 +45,7 @@ abstract class Api
 	protected function assert()
 	{
 		if(!$this->assertion) {
-			$this->assertion = new Assertion($this->transport);
+			$this->assertion = new Assertion($this->config);
 		}
 
 		return $this->assertion;
