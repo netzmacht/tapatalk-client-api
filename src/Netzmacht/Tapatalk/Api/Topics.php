@@ -2,6 +2,8 @@
 
 namespace Netzmacht\Tapatalk\Api;
 
+use Netzmacht\Tapatalk\Api\Search\AdvancedSearch;
+use Netzmacht\Tapatalk\Api\Search\SearchResult;
 use Netzmacht\Tapatalk\Api\Topics\SearchTopicPost;
 use Netzmacht\Tapatalk\Api\Topics\SubscribedTopic;
 use Netzmacht\Tapatalk\Api\Topics\Topic;
@@ -10,9 +12,9 @@ use Netzmacht\Tapatalk\Api\Topics\TopicResult;
 use Netzmacht\Tapatalk\Api\Topics\TopicPostResult;
 use Netzmacht\Tapatalk\Api\Topics\TopicStatus;
 use Netzmacht\Tapatalk\Api;
-use Netzmacht\Tapatalk\Exception\NotImplementedException;
 use Netzmacht\Tapatalk\Result;
 use Netzmacht\Tapatalk\Transport;
+use Netzmacht\Tapatalk\Transport\MethodCallResponse;
 
 
 /**
@@ -225,22 +227,26 @@ class Topics extends Api
 		$response = $request->call();
 		$this->assert()->noResultState($response);
 
-		$topics = array();
-
-		foreach($response->get('topics') as $topic) {
-			$topics[] = SearchTopicPost::fromResponse($topic);
-		}
-
-		return new Result($topics, $response->get('total_topic_num'), $offset);
+		return $this->createSearchResult($response, $offset, $searchId);
 	}
 
 
 	/**
-	 * @throws \Netzmacht\Tapatalk\Exception\NotImplementedException
+	 * @param array $filters
+	 * @param int $limit
+	 * @param int $offset
+	 * @param null $searchId
+	 * @return SearchResult
 	 */
-	public function advancedSearch()
+	public function advancedSearch(array $filters, $limit=20, $offset=20, $searchId=null)
 	{
-		throw new NotImplementedException('Advanced search is not implemented yet');
+		$method = $this->transport->createMethodCall('search', array('filters' => array('showposts' => 0)));
+		AdvancedSearch::applyFilters($method, $filters, $limit, $offset, $searchId);
+
+		$response = $method->call();
+		$this->assert()->noResultState($response);
+
+		return $this->createSearchResult($response, $offset, $response->get('search_id'));
 	}
 
 
@@ -324,5 +330,24 @@ class Topics extends Api
 			throw new \InvalidArgumentException('Invalid subscribe mode given: ' . $mode);
 		}
 	}
+
+
+	/**
+	 * @param $offset
+	 * @param $searchId
+	 * @param MethodCallResponse $response
+	 * @return SearchResult
+	 */
+	private function createSearchResult(MethodCallResponse $response, $offset, $searchId)
+	{
+		$topics = array();
+
+		foreach($response->get('topics') as $topic) {
+			$topics[] = SearchTopicPost::fromResponse($topic);
+		}
+
+		return new SearchResult($topics, $response->get('total_topic_num'), $offset, $searchId);
+	}
+
 
 }
