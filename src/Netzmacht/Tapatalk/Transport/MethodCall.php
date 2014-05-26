@@ -44,6 +44,14 @@ class MethodCall
 		$this->params     = $params;
 	}
 
+	/**
+	 * @return \Netzmacht\Tapatalk\Transport\Serializer
+	 */
+	public function getSerializer()
+	{
+		return $this->serializer;
+	}
+
 
 	/**
 	 * @param array $params
@@ -101,6 +109,22 @@ class MethodCall
 	public function call()
 	{
 		return $this->transport->call($this->method, $this->params);
+	}
+
+
+	/**
+	 * @param $name
+	 * @param null $default
+	 * @return null|$default
+	 */
+	public function getParam($name, $default=null)
+	{
+		if(array_key_exists($name, $this->params)) {
+			return $this->params[$name];
+
+		}
+
+		return $default;
 	}
 
 } 
