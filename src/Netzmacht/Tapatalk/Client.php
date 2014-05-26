@@ -3,6 +3,7 @@
 namespace Netzmacht\Tapatalk;
 
 use Netzmacht\Tapatalk\Api\Account;
+use Netzmacht\Tapatalk\Api\Board;
 use Netzmacht\Tapatalk\Api\Config;
 use Netzmacht\Tapatalk\Api\Forums;
 use Netzmacht\Tapatalk\Api\Posts;
@@ -36,6 +37,15 @@ class Client extends Api
 		if($username) {
 			$this->account()->login($username, $password);
 		}
+	}
+
+
+	/**
+	 * @return Board
+	 */
+	public function board()
+	{
+		return new Board($this->transport, $this->config);
 	}
 
 
