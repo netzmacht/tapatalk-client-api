@@ -323,10 +323,11 @@ class Account extends Api
 
 			$response = $this->transport->call('get_inbox_stat');
 
-			$this->unreadMessages = $response['inbox_unread_count'];
-			$this->unreadTopics   = $response['subscribed_topic_unread_count'];
+			$this->unreadMessages = $response->get('inbox_unread_count');
+			$this->unreadTopics   = $response->get('subscribed_topic_unread_count');
 		}
 	}
+
 
 	/**
 	 * @param $response
