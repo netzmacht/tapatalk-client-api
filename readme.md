@@ -29,12 +29,13 @@ $client = Netzmacht\Tapatalk\Factory::connect('http://example.com/forum/mobiquo/
 $client->config()->isPushTypeEnabled(Netzmacht\Tapatalk\Api\Config::PUSH_PRIVATE_MESSAGE);
 
 $searchResult = $client->posts()->advancedSearch(array(
-   Netzmacht\Tapatalk\Api\Search\AdvancedSearch::KEYWORDS => 'my keywords',
-   Netzmacht\Tapatalk\Api\Search\AdvancedSearch::USERNAME => 'myuser',
-   Netzmacht\Tapatalk\Api\Search\AdvancedSearch::ONLY_IN  => array(12, 43, 10), // forum ids
+       Netzmacht\Tapatalk\Api\Search\AdvancedSearch::KEYWORDS => 'my keywords',
+       Netzmacht\Tapatalk\Api\Search\AdvancedSearch::USERNAME => 'myuser',
+       Netzmacht\Tapatalk\Api\Search\AdvancedSearch::ONLY_IN  => array(12, 43, 10), // forum ids
+   )
    20, // limit
    60,  // offset
-));
+);
 
 $searchResult->getTotal(); // total posts. useful to
 $searchResult->hasMore(); // returns true if given result is not as big as total posts
