@@ -3,40 +3,12 @@
 namespace Netzmacht\Tapatalk\Api;
 
 
+use Netzmacht\Tapatalk\Api\Config\Features;
 use Netzmacht\Tapatalk\Transport;
 use Netzmacht\Tapatalk\Transport\MethodCallResponse;
 
 class Config
 {
-	const FEATURE_REPORT_POST             = 'report_post';
-	const FEATURE_REPORT_PM               = 'report_pm';
-	const FEATURE_MARK_ALL_READ           = 'mark_read';
-	const FEATURE_MARK_FORUM_READ         = 'mark_forum';
-	const FEATURE_SUBSCRIBE_FORUM         = 'subscribe_forum';
-	const FEATURE_LIST_LATEST_TOPICS      = 'get_latest_topic';
-	const FEATURE_GET_ID_BY_URL           = 'get_id_by_url';
-	const FEATURE_DELETE_REASON           = 'delete_reason';
-	const FEATURE_MOD_APPROVE_VIEW        = 'm_approve';
-	const FEATURE_MOD_DELETE_VIEW         = 'm_delete';
-	const FEATURE_MOD_REPORT_VIEW         = 'm_report';
-	const FEATURE_ANONYMOUS_LOGIN         = 'anonymous';
-	const FEATURE_SEARCH_ID               = 'searchid';
-	const FEATURE_DOWNLOAD_AVATAR         = 'avatar';
-	const FEATURE_PM_PAGINATION           = 'pm_load';
-	const FEATURE_SUBSCRIBE_PAGINATION    = 'subscribe_load';
-	const FEATURE_PM                      = 'inbox_stat';
-	const FEATURE_SUBSCRIBE_UNREAD_NUMBER = 'inbox_stat'; // no bug. it's actually the same config name. added for more semantic
-	const FEATURE_MULTI_QUOTE             = 'multi_quote';
-	const FEATURE_DEFAULT_SMILIES         = 'default_smilies';
-	const FEATURE_UNREAD                  = 'can_unread';
-	const FEATURE_ANNOUNCEMENTS           = 'announcement';
-	const FEATURE_EMOJI                   = 'emoji_support';
-	const FEATURE_PM_CONVERSATION = 'conversation';
-	const FEATURE_GET_TOPIC_STATUS = 'get_topic_status';
-	const FEATURE_GET_PARTICIPATED_FORUM = 'get_participated_forum';
-	const FEATURE_GET_FORUM_STATUS = 'get_forum_status';
-	const FEATURE_GET_SMILIES = 'get_smilies';
-
 	const PERM_GUEST_ACCESS = 'guest_okay';
 	const PERM_GUEST_SEARCH = 'guest_search';
 	const PERM_GUEST_WHO_IS_ONLINE = 'guest_whosonline';
@@ -107,31 +79,32 @@ class Config
 			return (bool) $response->get($name, false, $default);
 		};
 
-		$features[static::FEATURE_REPORT_POST]             = $value(static::FEATURE_REPORT_POST);
-		$features[static::FEATURE_REPORT_PM]               = $value(static::FEATURE_REPORT_PM);
-		$features[static::FEATURE_MARK_ALL_READ]           = $value(static::FEATURE_MARK_ALL_READ, true);
-		$features[static::FEATURE_MARK_FORUM_READ]         = $value(static::FEATURE_MARK_FORUM_READ);
-		$features[static::FEATURE_SUBSCRIBE_FORUM]         = $value(static::FEATURE_SUBSCRIBE_FORUM, true);
-		$features[static::FEATURE_LIST_LATEST_TOPICS]      = $value(static::FEATURE_LIST_LATEST_TOPICS);
-		$features[static::FEATURE_GET_ID_BY_URL]           = $value(static::FEATURE_GET_ID_BY_URL);
-		$features[static::FEATURE_MOD_APPROVE_VIEW]        = $value(static::FEATURE_MOD_APPROVE_VIEW);
-		$features[static::FEATURE_MOD_REPORT_VIEW]         = $value(static::FEATURE_MOD_DELETE_VIEW);
-		$features[static::FEATURE_MOD_DELETE_VIEW]         = $value(static::FEATURE_MOD_REPORT_VIEW);
-		$features[static::FEATURE_ANONYMOUS_LOGIN]         = $value(static::FEATURE_ANONYMOUS_LOGIN);
-		$features[static::FEATURE_SEARCH_ID]               = $value(static::FEATURE_SEARCH_ID);
-		$features[static::FEATURE_DOWNLOAD_AVATAR]         = $value(static::FEATURE_DOWNLOAD_AVATAR);
-		$features[static::FEATURE_PM]                      = $value(static::FEATURE_PM);
-		$features[static::FEATURE_SUBSCRIBE_UNREAD_NUMBER] = $value(static::FEATURE_SUBSCRIBE_UNREAD_NUMBER);
-		$features[static::FEATURE_MULTI_QUOTE]             = $value(static::FEATURE_MULTI_QUOTE);
-		$features[static::FEATURE_DEFAULT_SMILIES]         = $value(static::FEATURE_DEFAULT_SMILIES);
-		$features[static::FEATURE_UNREAD]                  = $value(static::FEATURE_UNREAD, true);
-		$features[static::FEATURE_ANNOUNCEMENTS]           = $value(static::FEATURE_ANNOUNCEMENTS, true);
-		$features[static::FEATURE_EMOJI]                   = $value(static::FEATURE_EMOJI);
-		$features[static::FEATURE_PM_CONVERSATION]         = $value(static::FEATURE_PM_CONVERSATION);
-		$features[static::FEATURE_GET_TOPIC_STATUS]        = $value(static::FEATURE_GET_TOPIC_STATUS);
-		$features[static::FEATURE_GET_PARTICIPATED_FORUM]  = $value(static::FEATURE_GET_PARTICIPATED_FORUM);
-		$features[static::FEATURE_GET_FORUM_STATUS]        = $value(static::FEATURE_GET_FORUM_STATUS);
-		$features[static::FEATURE_GET_SMILIES]        = $value(static::FEATURE_GET_SMILIES);
+		$features[Features::REPORT_POST]             = $value(Features::REPORT_POST);
+		$features[Features::REPORT_PM]               = $value(Features::REPORT_PM);
+		$features[Features::MARK_ALL_READ]           = $value(Features::MARK_ALL_READ, true);
+		$features[Features::MARK_FORUM_READ]         = $value(Features::MARK_FORUM_READ);
+		$features[Features::SUBSCRIBE_FORUM]         = $value(Features::SUBSCRIBE_FORUM, true);
+		$features[Features::LIST_LATEST_TOPICS]      = $value(Features::LIST_LATEST_TOPICS);
+		$features[Features::GET_ID_BY_URL]           = $value(Features::GET_ID_BY_URL);
+		$features[Features::MOD_APPROVE_VIEW]        = $value(Features::MOD_APPROVE_VIEW);
+		$features[Features::MOD_REPORT_VIEW]         = $value(Features::MOD_DELETE_VIEW);
+		$features[Features::MOD_DELETE_VIEW]         = $value(Features::MOD_REPORT_VIEW);
+		$features[Features::ANONYMOUS_LOGIN]         = $value(Features::ANONYMOUS_LOGIN);
+		$features[Features::SEARCH_ID]               = $value(Features::SEARCH_ID);
+		$features[Features::DOWNLOAD_AVATAR]         = $value(Features::DOWNLOAD_AVATAR);
+		$features[Features::PM]                      = $value(Features::PM);
+		$features[Features::SUBSCRIBE_UNREAD_NUMBER] = $value(Features::SUBSCRIBE_UNREAD_NUMBER);
+		$features[Features::MULTI_QUOTE]             = $value(Features::MULTI_QUOTE);
+		$features[Features::DEFAULT_SMILIES]         = $value(Features::DEFAULT_SMILIES);
+		$features[Features::UNREAD]                  = $value(Features::UNREAD, true);
+		$features[Features::ANNOUNCEMENTS]           = $value(Features::ANNOUNCEMENTS, true);
+		$features[Features::EMOJI]                   = $value(Features::EMOJI);
+		$features[Features::PM_CONVERSATION]         = $value(Features::PM_CONVERSATION);
+		$features[Features::GET_TOPIC_STATUS]        = $value(Features::GET_TOPIC_STATUS);
+		$features[Features::GET_PARTICIPATED_FORUM]  = $value(Features::GET_PARTICIPATED_FORUM);
+		$features[Features::GET_FORUM_STATUS]        = $value(Features::GET_FORUM_STATUS);
+		$features[Features::GET_SMILIES]             = $value(Features::GET_SMILIES);
+		$features[Features::GET_ACTIVITY]            = $value(Features::GET_ACTIVITY);
 
 		// TODO go on with conversation
 
