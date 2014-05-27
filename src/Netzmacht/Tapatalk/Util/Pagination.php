@@ -22,7 +22,7 @@ class Pagination
 	 */
 	public static function getPage($limit, $offset)
 	{
-		return abs($offset/$limit)+1;
+		return (int) ($offset/$limit)+1;
 	}
 
 } 
