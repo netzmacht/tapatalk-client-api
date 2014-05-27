@@ -25,4 +25,18 @@ class Pagination
 		return (int)($offset / $limit) + 1;
 	}
 
-} 
+
+	/**
+	 * @param $limit
+	 * @param $page
+	 * @return int
+	 */
+	public function getOffset($limit, $page=1)
+    {
+	    if($page < 1) {
+		    $page = 1;
+	    }
+
+	    return (($page-1) * $limit);
+    }
+}

@@ -26,4 +26,13 @@ class PaginationSpec extends ObjectBehavior
 	{
 		$this->getPage(10, 40)->shouldReturn((int)40 / 10 + 1);
 	}
+
+
+	function it_should_calculate_offset_from_given_page_and_limit()
+	{
+		$this->getOffset(10, -1)->shouldReturn(0);
+		$this->getOffset(10, 1)->shouldReturn(0);
+		$this->getOffset(10)->shouldReturn(0);
+		$this->getOffset(10, 2)->shouldReturn(10);
+	}
 }
