@@ -34,7 +34,7 @@ class Forum
 	/**
 	 * @var bool
 	 */
-	private $hasNewPost;
+	private $hasNewPosts;
 
 	/**
 	 * @var bool
@@ -46,15 +46,15 @@ class Forum
 	 * @param $name
 	 * @param $logo
 	 * @param $isProtected
-	 * @param $hasNewPost
+	 * @param $hasNewPosts
 	 */
-	function __construct($id, $name, $logo, $isProtected, $hasNewPost)
+	function __construct($id, $name, $logo, $isProtected, $hasNewPosts)
 	{
 		$this->id          = $id;
 		$this->name        = $name;
 		$this->logo        = $logo;
 		$this->isProtected = $isProtected;
-		$this->hasNewPost  = $hasNewPost;
+		$this->hasNewPosts  = $hasNewPosts;
 	}
 
 
@@ -95,9 +95,9 @@ class Forum
 	/**
 	 * @return boolean
 	 */
-	public function hasNewPost()
+	public function hasNewPosts()
 	{
-		return $this->hasNewPost;
+		return $this->hasNewPosts;
 	}
 
 

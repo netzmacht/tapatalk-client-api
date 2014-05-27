@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "17a43ac0425bdc1c5da819f8afafd212",
+    "hash": "f7d8c9e2a87fd704a3785e94ea3cfebf",
     "packages": [
         {
             "name": "guzzle/guzzle",
@@ -299,16 +299,16 @@
         },
         {
             "name": "phpspec/phpspec",
-            "version": "dev-master",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpspec/phpspec.git",
-                "reference": "5f3b795d37488439fc08ca6c7b33ec8fb28f643d"
+                "reference": "886a8c1f0a212d631942b5527691fadcd2aa8eb7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/phpspec/zipball/5f3b795d37488439fc08ca6c7b33ec8fb28f643d",
-                "reference": "5f3b795d37488439fc08ca6c7b33ec8fb28f643d",
+                "url": "https://api.github.com/repos/phpspec/phpspec/zipball/886a8c1f0a212d631942b5527691fadcd2aa8eb7",
+                "reference": "886a8c1f0a212d631942b5527691fadcd2aa8eb7",
                 "shasum": ""
             },
             "require": {
@@ -334,7 +334,8 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.0.x-dev"
+                    "dev-develop": "2.1.x-dev",
+                    "dev-master": "2.1.x-dev"
                 }
             },
             "autoload": {
@@ -368,7 +369,7 @@
                 "testing",
                 "tests"
             ],
-            "time": "2014-03-19 14:23:26"
+            "time": "2014-05-09 09:04:39"
         },
         {
             "name": "phpspec/prophecy",

@@ -12,7 +12,7 @@
         "guzzle/guzzle": "~3.8"
     },
     "require-dev": {
-        "phpspec/phpspec": "2.0.*@dev",
+        "phpspec/phpspec": "dev-develop",
         "jameshalsall/licenser": "dev-master"
     },
     "config": {
