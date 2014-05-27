@@ -13,6 +13,7 @@ namespace Netzmacht\Tapatalk\Api;
 
 
 use Netzmacht\Tapatalk\Api\Account\Alert;
+use Netzmacht\Tapatalk\Api\Account\LoginByTapatalkIdResult;
 use Netzmacht\Tapatalk\Api\Exception\InvalidResponseException;
 use Netzmacht\Tapatalk\Api;
 use Netzmacht\Tapatalk\Result;
@@ -139,9 +140,44 @@ class Account extends Api
 	}
 
 
-	public function loginByTapatalkId()
+	/**
+	 * @see http://tapatalk.com/api/api_section.php?id=12#sign_in
+	 * @param $token
+	 * @param $code
+	 * @param null $email
+	 * @param null $username
+	 * @param null $password
+	 */
+	public function loginByTapatalkId($token, $code, $email=null, $username=null, $password=null)
 	{
+		$method = $this->transport->createMethodCall('sign_in')
+			->set('token', $token)
+			->set('code', $code);
 
+		if($email || $username || $password) {
+			$method->set('email', (string) $email, true);
+		}
+
+		if($username || $password) {
+			$method->set('username', (string) $username, true);
+		}
+
+		if($password) {
+			$method->set('password', (string) $password, true);
+		}
+
+		$response = $method->call();
+		$this->assert()->noResultState($response);
+
+		if(!$response->get('status')) {
+			$this->loadAttributes($response);
+			$this->loadPermission($response);
+			$this->loadImageSizeDefinitions($response);
+
+			$this->loggedIn = true;
+		}
+
+		return LoginByTapatalkIdResult::fromResponse($response);
 	}
 
 
@@ -162,7 +198,7 @@ class Account extends Api
 
 	}
 
-	public function updatePasswort()
+	public function updatePassword()
 	{
 
 	}
