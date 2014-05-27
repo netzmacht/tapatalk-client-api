@@ -173,10 +173,36 @@ class Account extends Api
 
 	}
 
-
-	public function register()
+	/**
+	 * Register a new user
+	 *
+	 * @see http://tapatalk.com/api/api_section.php?id=12#register
+	 * @param $username
+	 * @param $password
+	 * @param $email
+	 * @param null $token
+	 * @param null $code
+	 * @return mixed|MethodCallResponse|Transport\MethodCallResponse[]
+	 */
+	public function registerUser($username, $password, $email, $token=null, $code=null)
 	{
+		$method = $this->transport->createMethodCall('register')
+			->set('username', $username, true)
+			->set('password', $password, true)
+			->set('email', $email, true);
 
+		if($token || $code) {
+			$method->set('token', $token);
+		}
+
+		if($code) {
+			$method->set('code', $code);
+		}
+
+		$response = $method->call();
+		$this->assert()->resultSuccess($response);
+
+		return $response->get('preview_topic_id');
 	}
 
 
