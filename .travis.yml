@@ -7,7 +7,7 @@ php:
 
 install:
   - composer self-update
-  - composer install --prefer-dist --dev
+  - composer install --dev
 
 script:
   - ./bin/phpspec run -fpretty
