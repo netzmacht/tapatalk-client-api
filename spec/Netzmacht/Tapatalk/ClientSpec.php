@@ -11,8 +11,15 @@ use Prophecy\Argument;
 
 class ClientSpec extends ObjectBehavior
 {
-	public function let(Transport $transport, Transport\MethodCallResponse $response)
+	public function let(Transport $transport)
 	{
+		$config = array(
+			'api_level' => 4,
+			'is_open'   => true
+		);
+
+		$response = new Transport\MethodCallResponse(new Transport\fXmlRpc\fXmlRpcSerializer(), $config);
+
 		$transport->call('get_config', array(), false)->willReturn($response);
 		$this->beConstructedWith($transport);
 	}
@@ -21,6 +28,35 @@ class ClientSpec extends ObjectBehavior
     {
         $this->shouldHaveType('Netzmacht\Tapatalk\Client');
     }
+
+
+	function it_should_throw_exception_if_api_version_is_not_at_least_4(Transport $transport)
+	{
+		$config = array(
+			'api_level' => 3
+		);
+
+		$response = new Transport\MethodCallResponse(new Transport\fXmlRpc\fXmlRpcSerializer(), $config);
+
+		$transport->call('get_config', array(), false)->willReturn($response);
+		$this->beConstructedWith($transport);
+		$this->shouldThrow('Netzmacht\Tapatalk\Api\Exception\ApiVersionNotSupportedException');
+	}
+
+
+	function it_should_throw_exception_if_server_is_not_open(Transport $transport)
+	{
+		$config = array(
+			'api_level' => 4,
+			'is_open'   => false
+		);
+
+		$response = new Transport\MethodCallResponse(new Transport\fXmlRpc\fXmlRpcSerializer(), $config);
+
+		$transport->call('get_config', array(), false)->willReturn($response);
+		$this->beConstructedWith($transport);
+		$this->shouldThrow('Netzmacht\Tapatalk\Api\Exception\ApiServiceNotAvailableException');
+	}
 
 
 	function it_should_return_account()

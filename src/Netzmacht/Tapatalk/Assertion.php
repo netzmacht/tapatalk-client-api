@@ -15,8 +15,7 @@ use Netzmacht\Tapatalk\Api\Config;
 use Netzmacht\Tapatalk\Api\Exception\PermissionDeniedException;
 use Netzmacht\Tapatalk\Api\Exception\ResponseException;
 use Netzmacht\Tapatalk\Api\Exception\UnsupportedFeatureException;
-use Netzmacht\Tapatalk\Exception\Api\DisabledPushTypeException;
-use Netzmacht\Tapatalk\Client;
+use Netzmacht\Tapatalk\Api\Exception\DisabledPushTypeException;
 use Netzmacht\Tapatalk\Transport\MethodCallResponse;
 
 class Assertion

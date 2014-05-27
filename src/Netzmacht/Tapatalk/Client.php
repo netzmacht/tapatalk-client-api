@@ -9,29 +9,6 @@
  *
  */
 
-/**
- * Copyright 2014 netzmacht creative David Molineus
- *
- * Licensed under the GNU Lesser General Public_License (LGPL), Version 3.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.gnu.org/licenses/lgpl-3.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * @package    tapatalk-client-api
- * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  netzmacht creative David Molineus
- * @license    LGPL 3.0
- * @filesource
- *
- */
-
 
 namespace Netzmacht\Tapatalk;
 
@@ -39,6 +16,8 @@ use Netzmacht\Tapatalk\Api\Account;
 use Netzmacht\Tapatalk\Api\Attachments;
 use Netzmacht\Tapatalk\Api\Board;
 use Netzmacht\Tapatalk\Api\Config;
+use Netzmacht\Tapatalk\Api\Exception\ApiServiceNotAvailableException;
+use Netzmacht\Tapatalk\Api\Exception\ApiVersionNotSupportedException;
 use Netzmacht\Tapatalk\Api\Forums;
 use Netzmacht\Tapatalk\Api\Posts;
 use Netzmacht\Tapatalk\Api\Users;
@@ -65,6 +44,8 @@ class Client extends Api
 	function __construct(Transport $transport, $username=null, $password=null)
 	{
 		parent::__construct($transport, $this->loadConfig($transport));
+
+		$this->checkRequirements();
 
 		$this->account = new Account($this->transport, $this->config);
 
@@ -205,5 +186,25 @@ class Client extends Api
 	    // TODO: Implement
 	    trigger_error('Not implemented: ' . __METHOD__, E_USER_ERROR);
     }
+
+
+	/**
+	 * Check requirements of
+	 */
+	private function checkRequirements()
+	{
+		// api version requirements
+		if(version_compare($this->config()->getApiVersion(), '4', '<')) {
+			throw new ApiVersionNotSupportedException(
+				sprintf('Api version "%s" is not supported', $this->config()->getApiVersion()),
+				$this->config()->getApiVersion()
+			);
+		}
+
+		// forum has to be open
+		if(!$this->config()->isOpen()) {
+			throw new ApiServiceNotAvailableException('Api service is not available.');
+		}
+	}
 
 }

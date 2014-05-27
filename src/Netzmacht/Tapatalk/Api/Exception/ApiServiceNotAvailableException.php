@@ -9,10 +9,10 @@
  *
  */
 
-namespace Netzmacht\Tapatalk\Exception;
+namespace Netzmacht\Tapatalk\Api\Exception;
 
 
-class NotImplementedException extends \Exception
+class ApiServiceNotAvailableException extends \Exception
 {
 
 } 

@@ -9,10 +9,10 @@
  *
  */
 
-namespace Netzmacht\Tapatalk\Exception\Api;
+namespace Netzmacht\Tapatalk\Api\Exception;
 
 
-class DisabledPushTypeException extends \Exception
+class ApiVersionNotSupportedException extends \Exception
 {
 
 } 
