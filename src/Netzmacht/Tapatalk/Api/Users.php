@@ -11,6 +11,7 @@
 
 namespace Netzmacht\Tapatalk\Api;
 
+use Netzmacht\Tapatalk\Api\Config\Features;
 use Netzmacht\Tapatalk\Api\Users\FollowUser;
 use Netzmacht\Tapatalk\Api\Users\OnlineUser;
 use Netzmacht\Tapatalk\Api\Users\OnlineUserResult;
@@ -18,7 +19,6 @@ use Netzmacht\Tapatalk\Api\Users\RecommendedUser;
 use Netzmacht\Tapatalk\Api\Users\User;
 use Netzmacht\Tapatalk\Api\Users\UserInfo;
 use Netzmacht\Tapatalk\Api;
-use Netzmacht\Tapatalk\Exception\NotImplementedException;
 use Netzmacht\Tapatalk\Result;
 use Netzmacht\Tapatalk\Transport;
 
@@ -48,6 +48,10 @@ class Users extends Api
 	public function getUserInfo($userId, $identifier = Users::USER_ID)
 	{
 		$this->assertValidIdentifier($identifier);
+
+		if($identifier == Users::USER_ID) {
+			$this->assert()->featureSupported(Features::USER_ID);
+		}
 
 		$response = $this->transport->createMethodCall('get_user_info')
 			->set($identifier, $userId, $identifier == static::USERNAME)

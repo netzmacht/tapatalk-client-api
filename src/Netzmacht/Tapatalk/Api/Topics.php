@@ -11,6 +11,7 @@
 
 namespace Netzmacht\Tapatalk\Api;
 
+use Netzmacht\Tapatalk\Api\Config\Features;
 use Netzmacht\Tapatalk\Api\Search\AdvancedSearch;
 use Netzmacht\Tapatalk\Api\Search\SearchResult;
 use Netzmacht\Tapatalk\Api\Topics\SearchTopicPost;
@@ -32,6 +33,7 @@ use Netzmacht\Tapatalk\Transport\MethodCallResponse;
  */
 class Topics extends Api
 {
+	const UNSUBSCRIBE_ALL    = 'ALL';
 
 	const LIST_STICKY        = 'TOP';
 	const LIST_ANNOUNCEMENTS = 'ANN';
@@ -166,6 +168,10 @@ class Topics extends Api
 	 */
 	public function unsubscribeTopic($topicId)
 	{
+		if($topicId == static::UNSUBSCRIBE_ALL) {
+			$this->assert()->featureSupported(Features::MASS_SUBSCRIBE);
+		}
+
 		$response = $this->transport->call('unsubscribe_topic', array('topic_id' => (string)$topicId));
 		$this->assert()->resultSuccess($response);
 	}
@@ -256,6 +262,8 @@ class Topics extends Api
 	 */
 	public function advancedSearch(array $filters, $limit = 20, $offset = 20, $searchId = null)
 	{
+		$this->assert()->featureSupported(Features::ADVANCED_SEARCH);
+
 		$method = $this->transport->createMethodCall('search', array('filters' => array('showposts' => 0)));
 		AdvancedSearch::applyFilters($method, $filters, $limit, $offset, $searchId);
 

@@ -32,6 +32,8 @@ class Board extends Api
 	 */
 	public function getIdByUrl($url)
 	{
+		$this->assert()->featureSupported(Features::GET_ID_BY_URL);
+
 		$response = $this->transport->call('get_id_by_url', array('url' => $url));
 		$this->assert()->noResultState($response);
 
@@ -62,6 +64,8 @@ class Board extends Api
 	 */
 	public function getSmilies()
 	{
+		$this->assert()->featureSupported(Features::GET_SMILIES);
+
 		$response = $this->transport->call('get_smilies');
 		$this->assert()->noResultState($response);
 

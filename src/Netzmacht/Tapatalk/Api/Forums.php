@@ -12,6 +12,7 @@
 namespace Netzmacht\Tapatalk\Api;
 
 use Netzmacht\Tapatalk\Api;
+use Netzmacht\Tapatalk\Api\Config\Features;
 use Netzmacht\Tapatalk\Api\Forums\Forum;
 use Netzmacht\Tapatalk\Api\Forums\ForumNode;
 use Netzmacht\Tapatalk\Result;
@@ -19,6 +20,8 @@ use Netzmacht\Tapatalk\Transport\MethodCallResponse;
 
 class Forums extends Api
 {
+	const UNSUBSCRIBE_ALL = 'ALL';
+
 	/**
 	 * @param bool $forumId
 	 * @param bool $descriptions
@@ -106,6 +109,10 @@ class Forums extends Api
 	 */
 	public function unsubscribeForum($forumId)
 	{
+		if($forumId == static::UNSUBSCRIBE_ALL) {
+			$this->assert()->featureSupported(Features::MASS_SUBSCRIBE);
+		}
+
 		$response = $this->transport->call('unsubscribe_forum', array('forum_id' => (string)$forumId));
 		$this->assert()->resultSuccess($response);
 	}
@@ -127,12 +134,29 @@ class Forums extends Api
 
 
 	/**
+	 * Mark forum by id as read
+	 *
 	 * @see  http://tapatalk.com/api/api_section.php?id=1#mark_all_as_read
 	 * @param int $forumId
 	 */
 	public function markForumAsRead($forumId)
 	{
+		$this->assert()->featureSupported(Features::MARK_FORUM_READ);
+
 		$response = $this->transport->call('mark_all_as_read', array('forum_id' => (string)$forumId));
+		$this->assert()->resultSuccess($response);
+	}
+
+	/**
+	 * Mark all forums as read
+	 *
+	 * @see  http://tapatalk.com/api/api_section.php?id=1#mark_all_as_read
+	 */
+	public function markAllForumsAsRead()
+	{
+		$this->assert()->featureSupported(Features::MARK_ALL_READ);
+
+		$response = $this->transport->call('mark_all_as_read');
 		$this->assert()->resultSuccess($response);
 	}
 

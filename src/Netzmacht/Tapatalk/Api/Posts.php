@@ -11,6 +11,7 @@
 
 namespace Netzmacht\Tapatalk\Api;
 
+use Netzmacht\Tapatalk\Api\Config\Features;
 use Netzmacht\Tapatalk\Api\Posts\PositionedPostResult;
 use Netzmacht\Tapatalk\Api\Posts\Post;
 use Netzmacht\Tapatalk\Api\Posts\PostFull;
@@ -22,7 +23,6 @@ use Netzmacht\Tapatalk\Api\Posts\SearchPost;
 use Netzmacht\Tapatalk\Api\Search\AdvancedSearch;
 use Netzmacht\Tapatalk\Api\Search\SearchResult;
 use Netzmacht\Tapatalk\Transport;
-use Netzmacht\Tapatalk\Util\Pagination;
 
 
 class Posts extends Api
@@ -214,6 +214,8 @@ class Posts extends Api
 	 */
 	public function advancedSearch(array $filters, $limit = 20, $offset = 20, $searchId = null)
 	{
+		$this->assert()->featureSupported(Features::ADVANCED_SEARCH);
+
 		$method = $this->transport->createMethodCall('search', array('filters' => array('showposts' => 1)));
 		AdvancedSearch::applyFilters($method, $filters, $limit, $offset, $searchId);
 

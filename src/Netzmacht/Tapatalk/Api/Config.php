@@ -82,63 +82,58 @@ class Config
 	 */
 	public static function fromResponse(MethodCallResponse $response)
 	{
-		$features    = array();
-		$permissions = array();
-		$value       = function ($name, $default = false) use ($response) {
-			return (bool)$response->get($name, false, $default);
-		};
-
-		$features[Features::REPORT_POST]             = $value(Features::REPORT_POST);
-		$features[Features::REPORT_PM]               = $value(Features::REPORT_PM);
-		$features[Features::MARK_ALL_READ]           = $value(Features::MARK_ALL_READ, true);
-		$features[Features::MARK_FORUM_READ]         = $value(Features::MARK_FORUM_READ);
-		$features[Features::SUBSCRIBE_FORUM]         = $value(Features::SUBSCRIBE_FORUM, true);
-		$features[Features::LIST_LATEST_TOPICS]      = $value(Features::LIST_LATEST_TOPICS);
-		$features[Features::GET_ID_BY_URL]           = $value(Features::GET_ID_BY_URL);
-		$features[Features::MOD_APPROVE_VIEW]        = $value(Features::MOD_APPROVE_VIEW);
-		$features[Features::MOD_REPORT_VIEW]         = $value(Features::MOD_DELETE_VIEW);
-		$features[Features::MOD_DELETE_VIEW]         = $value(Features::MOD_REPORT_VIEW);
-		$features[Features::ANONYMOUS_LOGIN]         = $value(Features::ANONYMOUS_LOGIN);
-		$features[Features::SEARCH_ID]               = $value(Features::SEARCH_ID);
-		$features[Features::DOWNLOAD_AVATAR]         = $value(Features::DOWNLOAD_AVATAR);
-		$features[Features::PM]                      = $value(Features::PM);
-		$features[Features::SUBSCRIBE_UNREAD_NUMBER] = $value(Features::SUBSCRIBE_UNREAD_NUMBER);
-		$features[Features::MULTI_QUOTE]             = $value(Features::MULTI_QUOTE);
-		$features[Features::DEFAULT_SMILIES]         = $value(Features::DEFAULT_SMILIES);
-		$features[Features::UNREAD]                  = $value(Features::UNREAD, true);
-		$features[Features::ANNOUNCEMENTS]           = $value(Features::ANNOUNCEMENTS, true);
-		$features[Features::EMOJI]                   = $value(Features::EMOJI);
-		$features[Features::PM_CONVERSATION]         = $value(Features::PM_CONVERSATION);
-		$features[Features::GET_TOPIC_STATUS]        = $value(Features::GET_TOPIC_STATUS);
-		$features[Features::GET_PARTICIPATED_FORUM]  = $value(Features::GET_PARTICIPATED_FORUM);
-		$features[Features::GET_FORUM_STATUS]        = $value(Features::GET_FORUM_STATUS);
-		$features[Features::GET_SMILIES]             = $value(Features::GET_SMILIES);
-		$features[Features::GET_ACTIVITY]            = $value(Features::GET_ACTIVITY);
-
-		// TODO go on with conversation
-
-		// TODO: get_forum
-
-		$permissions[static::PERM_GUEST_ACCESS]        = $value(static::PERM_GUEST_ACCESS);
-		$permissions[static::PERM_GUEST_SEARCH]        = $value(static::PERM_GUEST_SEARCH);
-		$permissions[static::PERM_GUEST_WHO_IS_ONLINE] = $value(static::PERM_GUEST_WHO_IS_ONLINE);
-
-		$passwordEncryption = $value('support_sha1') ? : ($value('support_md5') ? : null);
+		$passwordEncryption = (bool) $response->get('support_sha1') ?: ($response->get('support_md5') ? : null);
 
 		return new static(
 			$response->get('sys_version'),
 			$response->get('version'),
 			$response->get('api_level'),
 			$response->get('is_open'),
-			$features,
-			$permissions,
+			self::loadFeatures($response),
+			self::loadPermissions($response),
 			$passwordEncryption,
-			$value('min_search_length', 0),
+			$response->get('min_search_length', false, 0),
 			array_filter(explode(',', $response->get('push_type')))
 		);
 	}
 
+	/**
+	 * @param MethodCallResponse $response
+	 * @return mixed
+	 */
+	private static function loadPermissions(MethodCallResponse $response)
+	{
+		$permissions = array();
+		$value       = function ($name, $default = false) use ($response) {
+			return (bool)$response->get($name, false, $default);
+		};
 
+		$permissions[static::PERM_GUEST_ACCESS]        = $value(static::PERM_GUEST_ACCESS);
+		$permissions[static::PERM_GUEST_SEARCH]        = $value(static::PERM_GUEST_SEARCH);
+		$permissions[static::PERM_GUEST_WHO_IS_ONLINE] = $value(static::PERM_GUEST_WHO_IS_ONLINE);
+
+		return $permissions;
+	}
+
+
+	/**
+	 * @param MethodCallResponse $response
+	 * @return mixed
+	 */
+	private static function loadFeatures(MethodCallResponse $response)
+	{
+		$features = array();
+
+		foreach(Features::getFeatures() as $feature) {
+			$features[$feature] = (bool) $response->get($feature, false, Features::getDefaultValue($feature));
+		}
+
+		return $features;
+	}
+
+	/**
+	 * @return bool
+	 */
 	public function isOpen()
 	{
 		return $this->isOpen;
