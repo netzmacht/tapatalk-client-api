@@ -28,6 +28,30 @@ class ClientSpec extends ObjectBehavior
 		$this->account()->shouldReturnAnInstanceOf('Netzmacht\Tapatalk\Api\Account');
 	}
 
+	function it_should_throw_error_for_not_implemented_methods()
+	{
+		$this->shouldThrow('\Exception')->during('attachments');
+		$this->shouldThrow('\Exception')->during('messages');
+		$this->shouldThrow('\Exception')->during('conversations');
+		$this->shouldThrow('\Exception')->during('moderation');
+	}
+
+	function it_should_return_board()
+	{
+		$this->board()->shouldReturnAnInstanceOf('Netzmacht\Tapatalk\Api\Board');
+	}
+
+	function it_should_return_config()
+	{
+		$this->config()->shouldReturnAnInstanceOf('Netzmacht\Tapatalk\Api\Config');
+	}
+
+	function it_should_return_forums()
+	{
+		$this->forums()->shouldReturnAnInstanceOf('Netzmacht\Tapatalk\Api\Forums');
+	}
+
+
 	function it_should_return_posts()
 	{
 		$this->posts()->shouldReturnAnInstanceOf('Netzmacht\Tapatalk\Api\Posts');
@@ -38,10 +62,6 @@ class ClientSpec extends ObjectBehavior
 		$this->topics()->shouldReturnAnInstanceOf('Netzmacht\Tapatalk\Api\Topics');
 	}
 
-	function it_should_return_forums()
-	{
-		$this->forums()->shouldReturnAnInstanceOf('Netzmacht\Tapatalk\Api\Forums');
-	}
 
 	function it_should_return_users()
 	{

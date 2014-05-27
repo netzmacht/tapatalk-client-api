@@ -36,6 +36,7 @@
 namespace Netzmacht\Tapatalk;
 
 use Netzmacht\Tapatalk\Api\Account;
+use Netzmacht\Tapatalk\Api\Attachments;
 use Netzmacht\Tapatalk\Api\Board;
 use Netzmacht\Tapatalk\Api\Config;
 use Netzmacht\Tapatalk\Api\Forums;
@@ -124,10 +125,14 @@ class Client extends Api
 		return new Posts($this->transport, $this->config);
 	}
 
-
+	/**
+	 * @return Attachments
+	 * @throws
+	 */
 	public function attachments()
 	{
-
+		// TODO: Implement
+		trigger_error('Not implemented: ' . __METHOD__, E_USER_ERROR);
 	}
 
 
@@ -155,5 +160,50 @@ class Client extends Api
 
 		return Config::fromResponse($response);
 	}
+
+
+	/**
+	 * Private Messages API
+	 *
+	 * Not implemented yet
+	 *
+	 * @return Messages
+	 * @throws
+	 */
+	public function messages()
+    {
+	    // TODO: Implement
+	    trigger_error('Not implemented: ' . __METHOD__, E_USER_ERROR);
+    }
+
+
+	/**
+	 * Private Conversations API
+	 *
+	 * Not implemented yet
+	 *
+	 * @return Conversations
+	 * @throws
+	 */
+    public function conversations()
+    {
+	    // TODO: Implement
+	    trigger_error('Not implemented: ' . __METHOD__, E_USER_ERROR);
+    }
+
+
+	/**
+	 * Moderation API
+	 *
+	 * Not implemented yet
+	 *
+	 * @return Moderation
+	 * @throws
+	 */
+    public function moderation()
+    {
+	    // TODO: Implement
+	    trigger_error('Not implemented: ' . __METHOD__, E_USER_ERROR);
+    }
 
 }
