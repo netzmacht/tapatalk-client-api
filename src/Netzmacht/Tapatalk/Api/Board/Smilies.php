@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: david
- * Date: 26.05.14
- * Time: 18:01
- */
+
 
 namespace Netzmacht\Tapatalk\Api\Board;
 

@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: david
- * Date: 23.05.14
- * Time: 19:42
- */
 
 namespace Netzmacht\Tapatalk\Api\Attachments;
 

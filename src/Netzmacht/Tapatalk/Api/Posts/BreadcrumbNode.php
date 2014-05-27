@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: david
- * Date: 26.05.14
- * Time: 10:22
- */
 
 namespace Netzmacht\Tapatalk\Api\Posts;
 use Netzmacht\Tapatalk\Transport\MethodCallResponse;

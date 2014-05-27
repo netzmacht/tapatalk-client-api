@@ -1,15 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: david
- * Date: 23.05.14
- * Time: 07:33
- */
 
 namespace Netzmacht\Tapatalk\Api\Users;
 
 
-use Netzmacht\Tapatalk\Client;
 use Netzmacht\Tapatalk\Transport\MethodCallResponse;
 
 class User

@@ -1,5 +1,6 @@
 <?php
 
+
 namespace Netzmacht\Tapatalk;
 
 use Netzmacht\Tapatalk\Api\Account;

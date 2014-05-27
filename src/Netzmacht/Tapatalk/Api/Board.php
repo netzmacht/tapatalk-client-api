@@ -44,6 +44,7 @@ class Board extends Api
 		return Statistics::fromResponse($response);
 	}
 
+
 	/**
 	 * Get all smilies
 	 *
