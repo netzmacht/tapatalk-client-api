@@ -10,6 +10,7 @@
  */
 
 namespace Netzmacht\Tapatalk\Api\Posts;
+
 use Netzmacht\Tapatalk\Api\Attachments\Attachment;
 use Netzmacht\Tapatalk\Api\Attachments\FullAttachment;
 use Netzmacht\Tapatalk\Transport\MethodCall;
@@ -170,5 +171,4 @@ class RawPost
 	}
 
 
-
-} 
+}

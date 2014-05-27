@@ -27,7 +27,7 @@ class SearchTopicPost extends TopicPost
 	 */
 	public static function fromResponse(MethodCallResponse $response)
 	{
-		$topic = parent::fromResponse($response);
+		$topic            = parent::fromResponse($response);
 		$topic->forumName = $response->get('forum_name', true);
 
 		return $topic;

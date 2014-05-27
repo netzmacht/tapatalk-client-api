@@ -89,7 +89,8 @@ class TopicResult extends Result
 		$unreadStickyNumber,
 		$userCanPost,
 		$userCanSubscribe
-	) {
+	)
+	{
 		parent::__construct($items, $total, $offset);
 
 		$this->forumId                  = $forumId;
@@ -122,7 +123,7 @@ class TopicResult extends Result
 			static::buildPrefixes($response),
 			$response->get('unread_announce_count'),
 			$response->get('unread_sticky_count'),
-			$response->get('can_post',  false, true),
+			$response->get('can_post', false, true),
 			$response->get('can_subscribe', false, true)
 		);
 	}
@@ -229,7 +230,7 @@ class TopicResult extends Result
 	{
 		$prefixes = array();
 
-		foreach((array) $response->get('prefixes') as $prefix) {
+		foreach((array)$response->get('prefixes') as $prefix) {
 			$id    = $prefix->get('prefix_id', true);
 			$label = $prefix->get('prefix_display_name', true);
 

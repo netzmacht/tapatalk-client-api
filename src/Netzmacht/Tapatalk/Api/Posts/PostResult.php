@@ -111,7 +111,8 @@ class PostResult extends Result
 		$canSubscribe,
 		$canUserReply,
 		$canUserReport
-	) {
+	)
+	{
 		$this->forumId       = $forumId;
 		$this->forumName     = $forumName;
 		$this->topicId       = $topicId;

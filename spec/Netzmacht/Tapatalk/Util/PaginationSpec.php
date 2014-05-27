@@ -7,10 +7,10 @@ use Prophecy\Argument;
 
 class PaginationSpec extends ObjectBehavior
 {
-    function it_is_initializable()
-    {
-        $this->shouldHaveType('Netzmacht\Tapatalk\Util\Pagination');
-    }
+	function it_is_initializable()
+	{
+		$this->shouldHaveType('Netzmacht\Tapatalk\Util\Pagination');
+	}
 
 	function it_should_return_first_page_if_limit_is_bigger_than_offset()
 	{
@@ -24,6 +24,6 @@ class PaginationSpec extends ObjectBehavior
 
 	function it_should_return_quotient_of_page_limit_plus_1()
 	{
-		$this->getPage(10, 40)->shouldReturn((int)40/10+1);
+		$this->getPage(10, 40)->shouldReturn((int)40 / 10 + 1);
 	}
 }

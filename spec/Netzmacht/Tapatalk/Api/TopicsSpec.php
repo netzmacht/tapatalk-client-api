@@ -22,10 +22,10 @@ class TopicsSpec extends ObjectBehavior
 		$this->beConstructedWith($transport, $config);
 	}
 
-    function it_is_initializable()
-    {
-        $this->shouldHaveType('Netzmacht\Tapatalk\Api\Topics');
-    }
+	function it_is_initializable()
+	{
+		$this->shouldHaveType('Netzmacht\Tapatalk\Api\Topics');
+	}
 
 
 	function it_should_get_topics(Transport $transport, Transport\MethodCallResponse $response, Transport\MethodCall $request, TopicResult $result)

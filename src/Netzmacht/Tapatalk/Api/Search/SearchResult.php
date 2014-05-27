@@ -31,7 +31,7 @@ class SearchResult extends Result
 	 * @param int $offset
 	 * @param null $searchId
 	 */
-	function __construct(array $items, $total = null, $offset = 0, $searchId=null)
+	function __construct(array $items, $total = null, $offset = 0, $searchId = null)
 	{
 		parent::__construct($items, $total, $offset);
 

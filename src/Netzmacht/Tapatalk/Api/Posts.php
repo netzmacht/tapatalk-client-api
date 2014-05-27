@@ -28,7 +28,7 @@ use Netzmacht\Tapatalk\Util\Pagination;
 class Posts extends Api
 {
 
-	const STATE_PUBLISHED = 'published';
+	const STATE_PUBLISHED               = 'published';
 	const STATE_MOD_PUBLISHING_REQUIRED = 'moderator';
 
 	/**
@@ -41,12 +41,12 @@ class Posts extends Api
 	 * @param bool $asHtml
 	 * @return PostResult|PostFull[]
 	 */
-	public function getPosts($topicId, $limit=50, $offset=0, $asHtml=false)
+	public function getPosts($topicId, $limit = 50, $offset = 0, $asHtml = false)
 	{
 		$params = array(
-			'topicId'     => (string) $topicId,
+			'topicId'     => (string)$topicId,
 			'start_num'   => $offset,
-			'last_num'    => $offset+$limit-1,
+			'last_num'    => $offset + $limit - 1,
 			'return_html' => $asHtml
 		);
 
@@ -66,10 +66,10 @@ class Posts extends Api
 	 * @param bool $asHtml
 	 * @return PositionedPostResult|PostFull[]
 	 */
-	public function getUnreadPosts($topicId, $limit=20, $asHtml=false)
+	public function getUnreadPosts($topicId, $limit = 20, $asHtml = false)
 	{
 		$params = array(
-			'topicId'           => (string) $topicId,
+			'topicId'           => (string)$topicId,
 			'posts_per_request' => $limit,
 			'return_html'       => $asHtml
 		);
@@ -90,10 +90,10 @@ class Posts extends Api
 	 * @param bool $asHtml
 	 * @return PositionedPostResult|PostFull[]
 	 */
-	public function getPostsStartByPost($postId, $limit=20, $asHtml=false)
+	public function getPostsStartByPost($postId, $limit = 20, $asHtml = false)
 	{
 		$params = array(
-			'post_id'           => (string) $postId,
+			'post_id'           => (string)$postId,
 			'posts_per_request' => $limit,
 			'return_html'       => $asHtml
 		);
@@ -114,7 +114,7 @@ class Posts extends Api
 	 */
 	public function getPostQuote($postId)
 	{
-		$response = $this->transport->call('get_quote_post', array('post_id' => (string) $postId));
+		$response = $this->transport->call('get_quote_post', array('post_id' => (string)$postId));
 		$this->assert()->noResultState($response);
 
 		return PostQuote::fromResponse($response);
@@ -130,7 +130,7 @@ class Posts extends Api
 	 */
 	public function getRawPost($postId)
 	{
-		$response = $this->transport->call('get_raw_post', array('post_id' => (string) $postId));
+		$response = $this->transport->call('get_raw_post', array('post_id' => (string)$postId));
 		$this->assert()->noResultState($response);
 
 		return RawPost::fromResponse($response);
@@ -149,18 +149,18 @@ class Posts extends Api
 	 * @param null $reason
 	 * @return array
 	 */
-	public function updatePost($postId, $title, $content, $returnAsHtml=false, array $attachmentIds=null, $groupId=null, $reason=null)
+	public function updatePost($postId, $title, $content, $returnAsHtml = false, array $attachmentIds = null, $groupId = null, $reason = null)
 	{
 		$method = $this->transport->createMethodCall('save_raw_post')
-			->set('post_id', (string) $postId)
+			->set('post_id', (string)$postId)
 			->set('post_title', $title, true)
 			->set('post_content', $content, true);
 
 		if($attachmentIds || $reason) {
 			$method
 				->set('return_html', $returnAsHtml)
-				->set('attachmentIds', (array) $attachmentIds)
-				->set('group_id', (string) $groupId);
+				->set('attachmentIds', (array)$attachmentIds)
+				->set('group_id', (string)$groupId);
 		}
 
 		if($reason) {
@@ -171,7 +171,7 @@ class Posts extends Api
 		$this->assert()->resultSuccess($response);
 
 		return array(
-			'state' => $response->get('state')  ? static::STATE_MOD_PUBLISHING_REQUIRED : static::STATE_PUBLISHED,
+			'state'   => $response->get('state') ? static::STATE_MOD_PUBLISHING_REQUIRED : static::STATE_PUBLISHED,
 			'content' => $response->get('post_content', true)
 		);
 	}
@@ -184,15 +184,15 @@ class Posts extends Api
 	 * @param null $searchId
 	 * @return SearchResult|SearchPost[]
 	 */
-	public function search($keywords=null, $limit=20, $offset=0, $searchId=null)
+	public function search($keywords = null, $limit = 20, $offset = 0, $searchId = null)
 	{
 		$method = $this->transport->createMethodCall('search_post')
 			->set('search_string', $keywords, true)
 			->set('start_num', $offset)
-			->set('last_num', $offset+$limit-1);
+			->set('last_num', $offset + $limit - 1);
 
 		if($searchId) {
-			$method->set('search_id', (string) $searchId);
+			$method->set('search_id', (string)$searchId);
 		}
 
 		$response = $method->call();
@@ -212,7 +212,7 @@ class Posts extends Api
 	 * @param null $searchId
 	 * @return SearchResult|SearchPost[]
 	 */
-	public function advancedSearch(array $filters, $limit=20, $offset=20, $searchId=null)
+	public function advancedSearch(array $filters, $limit = 20, $offset = 20, $searchId = null)
 	{
 		$method = $this->transport->createMethodCall('search', array('filters' => array('showposts' => 1)));
 		AdvancedSearch::applyFilters($method, $filters, $limit, $offset, $searchId);
@@ -231,13 +231,13 @@ class Posts extends Api
 	 * @param $postId
 	 * @param bool $like
 	 */
-	public function likePost($postId, $like=true)
+	public function likePost($postId, $like = true)
 	{
 		$this->assert()->pushTypeIsEnabled(Config::PUSH_LIKE);
 
 		$method = $like ? 'like_post' : 'unlike_post';
 
-		$response = $this->transport->call($method, array('post_id' => (string) $postId));
+		$response = $this->transport->call($method, array('post_id' => (string)$postId));
 		$this->assert()->resultSuccess($response);
 	}
 
@@ -249,7 +249,7 @@ class Posts extends Api
 	{
 		$this->assert()->pushTypeIsEnabled(Config::PUSH_THANK);
 
-		$response = $this->transport->call('thank_post', array('post_id' => (string) $postId));
+		$response = $this->transport->call('thank_post', array('post_id' => (string)$postId));
 		$this->assert()->resultSuccess($response);
 	}
 
@@ -263,17 +263,17 @@ class Posts extends Api
 	 * @param null $groupId
 	 * @return array
 	 */
-	public function replyTo($forumId, $topicId, $body, $subject=null, $attachmentIds = null, $groupId=null)
+	public function replyTo($forumId, $topicId, $body, $subject = null, $attachmentIds = null, $groupId = null)
 	{
 		$request = $this->transport->createMethodCall('replay_post')
-			->set('forum_id', (string) $forumId)
-			->set('topic_id', (string) $topicId)
+			->set('forum_id', (string)$forumId)
+			->set('topic_id', (string)$topicId)
 			->set('subject', $subject, true)
 			->set('tex_body', $body);
 
 		if($attachmentIds) {
-			$request->set('attachment_id_array', array_map('strval', (array) $attachmentIds));
-			$request->set('group_id', (string) $groupId);
+			$request->set('attachment_id_array', array_map('strval', (array)$attachmentIds));
+			$request->set('group_id', (string)$groupId);
 		}
 
 		$response = $request->call();
@@ -290,9 +290,9 @@ class Posts extends Api
 	 * @param $postId
 	 * @param null $reason
 	 */
-	public function reportPost($postId, $reason=null)
+	public function reportPost($postId, $reason = null)
 	{
-		$method = $this->transport->createMethodCall('report_post', array('post_id' => (string) $postId));
+		$method = $this->transport->createMethodCall('report_post', array('post_id' => (string)$postId));
 
 		if($reason) {
 			$method->set('reason', $reason, true);

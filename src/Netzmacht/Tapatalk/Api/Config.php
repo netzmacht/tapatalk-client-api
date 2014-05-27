@@ -18,22 +18,22 @@ use Netzmacht\Tapatalk\Transport\MethodCallResponse;
 
 class Config
 {
-	const PERM_GUEST_ACCESS = 'guest_okay';
-	const PERM_GUEST_SEARCH = 'guest_search';
+	const PERM_GUEST_ACCESS        = 'guest_okay';
+	const PERM_GUEST_SEARCH        = 'guest_search';
 	const PERM_GUEST_WHO_IS_ONLINE = 'guest_whosonline';
 
-	const ENCRYPTION_MD5 = 'md5';
+	const ENCRYPTION_MD5  = 'md5';
 	const ENCRYPTION_SHA1 = 'sha1';
 
-	const PUSH_ANNOUNCMENT = 'ann';
-	const PUSH_CONVERSATION = 'conv';
+	const PUSH_ANNOUNCMENT     = 'ann';
+	const PUSH_CONVERSATION    = 'conv';
 	const PUSH_PRIVATE_MESSAGE = 'pm';
-	const PUSH_LIKE = 'like';
-	const PUSH_THANK = 'thank';
-	const PUSH_QUOTE = 'quote';
-	const PUSH_NEW_TOPIC = 'newtopic';
-	const PUSH_TAG = 'tag';
-	const PUSH_SUB = 'sub'; // TODO whre it is used? Find a better name
+	const PUSH_LIKE            = 'like';
+	const PUSH_THANK           = 'thank';
+	const PUSH_QUOTE           = 'quote';
+	const PUSH_NEW_TOPIC       = 'newtopic';
+	const PUSH_TAG             = 'tag';
+	const PUSH_SUB             = 'sub'; // TODO whre it is used? Find a better name
 
 
 	private $features = array();
@@ -84,8 +84,8 @@ class Config
 	{
 		$features    = array();
 		$permissions = array();
-		$value       = function($name, $default=false) use($response) {
-			return (bool) $response->get($name, false, $default);
+		$value       = function ($name, $default = false) use ($response) {
+			return (bool)$response->get($name, false, $default);
 		};
 
 		$features[Features::REPORT_POST]             = $value(Features::REPORT_POST);
@@ -123,7 +123,7 @@ class Config
 		$permissions[static::PERM_GUEST_SEARCH]        = $value(static::PERM_GUEST_SEARCH);
 		$permissions[static::PERM_GUEST_WHO_IS_ONLINE] = $value(static::PERM_GUEST_WHO_IS_ONLINE);
 
-		$passwordEncryption = $value('support_sha1') ?: ($value('support_md5') ?: null);
+		$passwordEncryption = $value('support_sha1') ? : ($value('support_md5') ? : null);
 
 		return new static(
 			$response->get('sys_version'),
@@ -162,7 +162,8 @@ class Config
 	 * @param $key
 	 * @return bool
 	 */
-	public function hasPermission($key) {
+	public function hasPermission($key)
+	{
 		if(array_key_exists($key, $this->permissions)) {
 			return $this->permissions[$key];
 		}

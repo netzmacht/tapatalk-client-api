@@ -95,7 +95,7 @@ class TopicStatus
 			$response->get('is_subscribed', false, false),
 			$response->get('new_post', false, false),
 			$response->get('can_subscribe', false, true),
-			DateTime::createFromTimestamp($response->get('last_reply_time') ?: $response->get('timestamp')),
+			DateTime::createFromTimestamp($response->get('last_reply_time') ? : $response->get('timestamp')),
 			$response->get('reply_number'),
 			$response->get('view_number')
 		);

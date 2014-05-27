@@ -22,10 +22,10 @@ use Netzmacht\Tapatalk\Util\DateTime;
  */
 class Activity
 {
-	const TYPE_POST = 'post';
-	const TYPE_USER = 'user';
+	const TYPE_POST            = 'post';
+	const TYPE_USER            = 'user';
 	const TYPE_PRIVATE_MESSAGE = 'om';
-	const TYPE_SUB  = 'sub';
+	const TYPE_SUB             = 'sub';
 
 
 	/**

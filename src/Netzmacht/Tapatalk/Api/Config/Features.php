@@ -15,7 +15,7 @@ namespace Netzmacht\Tapatalk\Api\Config;
  * Class Features
  * @package Netzmacht\Tapatalk\Api\Config
  */
-class Features 
+class Features
 {
 	const REPORT_POST             = 'report_post';
 	const REPORT_PM               = 'report_pm';

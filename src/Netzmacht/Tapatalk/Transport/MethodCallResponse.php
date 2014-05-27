@@ -14,7 +14,6 @@ namespace Netzmacht\Tapatalk\Transport;
 use IteratorAggregate;
 
 
-
 /**
  * Interface Response
  * @package Netzmacht\Tapatalk\Transport
@@ -52,7 +51,7 @@ class MethodCallResponse implements IteratorAggregate
 	 * @param bool $deserialize should value be deserialized
 	 * @return mixed|MethodCallResponse|MethodCallResponse[]
 	 */
-	public function get($name, $deserialize=false, $default=null)
+	public function get($name, $deserialize = false, $default = null)
 	{
 		if(!array_key_exists($name, $this->data)) {
 			return $default;
@@ -88,7 +87,7 @@ class MethodCallResponse implements IteratorAggregate
 	 * @param bool $deserialized
 	 * @return array
 	 */
-	public function getData($deserialized=false)
+	public function getData($deserialized = false)
 	{
 		if(!$deserialized) {
 			return $this->data;
@@ -100,8 +99,7 @@ class MethodCallResponse implements IteratorAggregate
 			if(is_array($value)) {
 				$value = $this->get($name);
 				$value = $value->getData($deserialized);
-			}
-			else {
+			} else {
 				$value = $this->serializer->deserialize($value);
 			}
 

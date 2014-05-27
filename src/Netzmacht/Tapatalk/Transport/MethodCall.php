@@ -10,6 +10,7 @@
  */
 
 namespace Netzmacht\Tapatalk\Transport;
+
 use Netzmacht\Tapatalk\Transport;
 
 /**
@@ -45,7 +46,7 @@ class MethodCall
 	 * @param $method
 	 * @param array $params
 	 */
-	function __construct(Transport $transport, Serializer $serializer, $method, array $params=array())
+	function __construct(Transport $transport, Serializer $serializer, $method, array $params = array())
 	{
 		$this->transport  = $transport;
 		$this->serializer = $serializer;
@@ -82,7 +83,7 @@ class MethodCall
 	 * @param bool $serialize
 	 * @return $this
 	 */
-	public function set($name, $value, $serialize=false)
+	public function set($name, $value, $serialize = false)
 	{
 		if($serialize) {
 			$value = $this->serializer->serialize($value);
@@ -126,7 +127,7 @@ class MethodCall
 	 * @param null $default
 	 * @return null|$default
 	 */
-	public function getParam($name, $default=null)
+	public function getParam($name, $default = null)
 	{
 		if(array_key_exists($name, $this->params)) {
 			return $this->params[$name];

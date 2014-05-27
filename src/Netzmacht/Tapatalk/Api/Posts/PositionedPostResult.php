@@ -10,6 +10,7 @@
  */
 
 namespace Netzmacht\Tapatalk\Api\Posts;
+
 use Netzmacht\Tapatalk\Transport\MethodCallResponse;
 
 /**
@@ -53,8 +54,9 @@ class PositionedPostResult extends PostResult
 		$canSubscribe,
 		$canUserReply,
 		$canUserReport,
-		$position=null
-	) {
+		$position = null
+	)
+	{
 		parent::__construct(
 			$forumId,
 			$forumName,
@@ -82,7 +84,7 @@ class PositionedPostResult extends PostResult
 	public static function fromResponse(MethodCallResponse $response)
 	{
 		/** @var PositionedPostResult $result */
-		$result = parent::fromResponse($response);
+		$result           = parent::fromResponse($response);
 		$result->position = $response->get('position');
 
 		return $result;

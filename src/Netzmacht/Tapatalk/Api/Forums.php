@@ -24,14 +24,14 @@ class Forums extends Api
 	 * @param bool $descriptions
 	 * @return ForumNode[]
 	 */
-	public function getForumTree($forumId=null, $descriptions=true)
+	public function getForumTree($forumId = null, $descriptions = true)
 	{
 		$params = array(
 			'return_description' => $descriptions,
 		);
 
 		if($forumId) {
-			$params['forum_id'] = (string) $forumId;
+			$params['forum_id'] = (string)$forumId;
 		}
 
 		$response = $this->transport->call('get_forum', $params);
@@ -95,7 +95,7 @@ class Forums extends Api
 	 */
 	public function subscribeForum($forumId)
 	{
-		$response = $this->transport->call('subscribe_forum', array('forum_id' => (string) $forumId));
+		$response = $this->transport->call('subscribe_forum', array('forum_id' => (string)$forumId));
 		$this->assert()->resultSuccess($response);
 	}
 
@@ -106,7 +106,7 @@ class Forums extends Api
 	 */
 	public function unsubscribeForum($forumId)
 	{
-		$response = $this->transport->call('unsubscribe_forum', array('forum_id' => (string) $forumId));
+		$response = $this->transport->call('unsubscribe_forum', array('forum_id' => (string)$forumId));
 		$this->assert()->resultSuccess($response);
 	}
 
@@ -118,7 +118,7 @@ class Forums extends Api
 	 */
 	public function loginToProtectedForum($forumId, $password)
 	{
-		$response = $this->transport->createMethodCall('login_forum', array('forum_id' => (string) $forumId))
+		$response = $this->transport->createMethodCall('login_forum', array('forum_id' => (string)$forumId))
 			->set('password', $password, true)
 			->call();
 
@@ -132,7 +132,7 @@ class Forums extends Api
 	 */
 	public function markForumAsRead($forumId)
 	{
-		$response = $this->transport->call('mark_all_as_read', array('forum_id' => (string) $forumId));
+		$response = $this->transport->call('mark_all_as_read', array('forum_id' => (string)$forumId));
 		$this->assert()->resultSuccess($response);
 	}
 

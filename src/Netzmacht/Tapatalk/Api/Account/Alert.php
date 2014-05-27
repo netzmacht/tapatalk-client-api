@@ -24,8 +24,8 @@ use Netzmacht\Tapatalk\Util\DateTime;
  */
 class Alert extends Activity
 {
-	const TYPE_POST = 'post';
-	const TYPE_USER = 'user';
+	const TYPE_POST            = 'post';
+	const TYPE_USER            = 'user';
 	const TYPE_PRIVATE_MESSAGE = 'om';
 
 
@@ -58,9 +58,9 @@ class Alert extends Activity
 	{
 		parent::__construct($message, $contentId, $contentType, $user, $createdAt);
 
-		$this->unread      = $unread;
-		$this->topicId     = $topicId;
-		$this->position    = $position;
+		$this->unread   = $unread;
+		$this->topicId  = $topicId;
+		$this->position = $position;
 	}
 
 

@@ -110,7 +110,7 @@ class SubscribedTopic
 			$response->get('forum_name', true),
 			$response->get('reply_number'),
 			$response->get('view_number'),
-			DateTime::createFromTimestamp($response->get('post_time') ?: $response->get('timestamp')),
+			DateTime::createFromTimestamp($response->get('post_time') ? : $response->get('timestamp')),
 			$response->get('is_closed', false, false)
 		);
 	}

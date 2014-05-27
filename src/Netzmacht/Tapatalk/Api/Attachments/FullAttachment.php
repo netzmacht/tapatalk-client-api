@@ -40,11 +40,11 @@ class FullAttachment extends Attachment
 	 * @param $thumbnail
 	 * @param null $fileSize
 	 */
-	function __construct($id, $fileName, $url, $contentType, $thumbnail, $fileSize=null)
+	function __construct($id, $fileName, $url, $contentType, $thumbnail, $fileSize = null)
 	{
 		parent::__construct($url, $contentType, $thumbnail);
 
-		$this->id = $id;
+		$this->id       = $id;
 		$this->fileSize = $fileSize;
 		$this->fileName = $fileName;
 	}
@@ -65,7 +65,6 @@ class FullAttachment extends Attachment
 			$response->get('filesize')
 		);
 	}
-
 
 
 	/**

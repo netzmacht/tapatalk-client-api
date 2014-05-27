@@ -16,7 +16,7 @@ use Netzmacht\Tapatalk\Transport\MethodCallResponse;
 
 class RecommendedUser extends User
 {
-	const TYPE_CONTACT = 'contact';
+	const TYPE_CONTACT   = 'contact';
 	const TYPE_FOLLOWING = 'following';
 	const TYPE_FOLLOWER  = 'follower';
 	const TYPE_LIKE      = 'like';

@@ -10,6 +10,7 @@
  */
 
 namespace Netzmacht\Tapatalk\Api\Topics;
+
 use Netzmacht\Tapatalk\Api\Users\User;
 
 
@@ -82,7 +83,8 @@ abstract class TopicBase extends TopicStatus
 		$viewNumber,
 		$canSubscribe,
 		$participatedUserIds
-	) {
+	)
+	{
 		parent::__construct($id, $isClosed, $isSubscribed, $hasNewPosts, $canSubscribe, $lastReplyAt, $replyNumber, $viewNumber);
 
 		$this->forumId             = $forumId;

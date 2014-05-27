@@ -41,7 +41,7 @@ class Client extends Api
 	 * @param string|null $username
 	 * @param string|null $password
 	 */
-	function __construct(Transport $transport, $username=null, $password=null)
+	function __construct(Transport $transport, $username = null, $password = null)
 	{
 		parent::__construct($transport, $this->loadConfig($transport));
 
@@ -152,10 +152,10 @@ class Client extends Api
 	 * @throws
 	 */
 	public function messages()
-    {
-	    // TODO: Implement
-	    trigger_error('Not implemented: ' . __METHOD__, E_USER_ERROR);
-    }
+	{
+		// TODO: Implement
+		trigger_error('Not implemented: ' . __METHOD__, E_USER_ERROR);
+	}
 
 
 	/**
@@ -166,11 +166,11 @@ class Client extends Api
 	 * @return Conversations
 	 * @throws
 	 */
-    public function conversations()
-    {
-	    // TODO: Implement
-	    trigger_error('Not implemented: ' . __METHOD__, E_USER_ERROR);
-    }
+	public function conversations()
+	{
+		// TODO: Implement
+		trigger_error('Not implemented: ' . __METHOD__, E_USER_ERROR);
+	}
 
 
 	/**
@@ -181,11 +181,11 @@ class Client extends Api
 	 * @return Moderation
 	 * @throws
 	 */
-    public function moderation()
-    {
-	    // TODO: Implement
-	    trigger_error('Not implemented: ' . __METHOD__, E_USER_ERROR);
-    }
+	public function moderation()
+	{
+		// TODO: Implement
+		trigger_error('Not implemented: ' . __METHOD__, E_USER_ERROR);
+	}
 
 
 	/**

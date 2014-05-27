@@ -11,6 +11,7 @@
 
 
 namespace Netzmacht\Tapatalk\Api\Board;
+
 use Netzmacht\Tapatalk\Transport\MethodCallResponse;
 
 

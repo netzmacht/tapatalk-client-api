@@ -10,6 +10,7 @@
  */
 
 namespace Netzmacht\Tapatalk\Api\Posts;
+
 use Netzmacht\Tapatalk\Transport\MethodCallResponse;
 
 

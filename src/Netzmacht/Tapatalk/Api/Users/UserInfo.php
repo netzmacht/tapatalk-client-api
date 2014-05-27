@@ -118,7 +118,8 @@ class UserInfo extends User
 		$doYouFollow,
 		$follower,
 		$topicId
-	) {
+	)
+	{
 		parent::__construct($userId, $username, $avatar);
 
 		$this->acceptFollow          = $acceptFollow;
@@ -195,11 +196,9 @@ class UserInfo extends User
 	{
 		if($response['reg_time']) {
 			$tstamp = $response['reg_time'];
-		}
-		elseif(array_key_exists('timestamp_reg', $response)) {
+		} elseif(array_key_exists('timestamp_reg', $response)) {
 			$tstamp = $response['timestamp_reg'];
-		}
-		else {
+		} else {
 			return null;
 		}
 
@@ -247,7 +246,7 @@ class UserInfo extends User
 	 * @param null $default
 	 * @return mixed
 	 */
-	public function getCustomField($name, $default=null)
+	public function getCustomField($name, $default = null)
 	{
 		if(isset($this->customFields[$name])) {
 			return $this->customFields[$name];

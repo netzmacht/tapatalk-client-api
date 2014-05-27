@@ -73,5 +73,4 @@ class FollowUser extends User
 	}
 
 
-
-} 
+}

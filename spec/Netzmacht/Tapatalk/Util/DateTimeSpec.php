@@ -9,10 +9,10 @@ use Prophecy\Prophecy\MethodProphecy;
 
 class DateTimeSpec extends ObjectBehavior
 {
-    function it_is_initializable()
-    {
-        $this->shouldHaveType('Netzmacht\Tapatalk\Util\DateTime');
-    }
+	function it_is_initializable()
+	{
+		$this->shouldHaveType('Netzmacht\Tapatalk\Util\DateTime');
+	}
 
 
 	function it_should_return_instance_of_php_datetime()
@@ -41,12 +41,13 @@ class DateTimeSpec extends ObjectBehavior
 	public function getMatchers()
 	{
 		return array(
-			'equalTimestamp' => function($subject, $key, $tolerance=0) {
+			'equalTimestamp' => function ($subject, $key, $tolerance = 0) {
 					if($tolerance) {
 						$ts = $subject->getTimestamp();
 
-						return ((($ts+$tolerance) > $key) && (($ts-$tolerance) < $key));
+						return ((($ts + $tolerance) > $key) && (($ts - $tolerance) < $key));
 					}
+
 					return ($subject->getTimestamp() === $key);
 				}
 		);

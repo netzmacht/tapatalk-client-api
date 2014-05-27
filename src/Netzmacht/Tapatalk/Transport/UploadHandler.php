@@ -21,6 +21,6 @@ interface UploadHandler
 	 * @param array $params
 	 * @return mixed
 	 */
-	public function upload($path, $file, $params=array());
+	public function upload($path, $file, $params = array());
 
 }

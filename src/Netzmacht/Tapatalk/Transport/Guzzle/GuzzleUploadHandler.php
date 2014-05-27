@@ -10,6 +10,7 @@
  */
 
 namespace Netzmacht\Tapatalk\Transport\Guzzle;
+
 use Guzzle\Http\Client;
 
 /**
@@ -39,7 +40,7 @@ class GuzzleUploadHandler
 	 * @param array $params
 	 * @return string
 	 */
-	public function upload($path, $file, $params=array())
+	public function upload($path, $file, $params = array())
 	{
 		$params = array_merge($params, array(
 			'content' => pathinfo($file, PATHINFO_BASENAME),
@@ -52,7 +53,7 @@ class GuzzleUploadHandler
 
 		$response = $this->client->send($request);
 
-		return (string) $response->getBody();
+		return (string)$response->getBody();
 	}
 
 

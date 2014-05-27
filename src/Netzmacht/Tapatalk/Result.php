@@ -37,7 +37,7 @@ class Result implements \IteratorAggregate
 	 * @param int $total
 	 * @param int $offset
 	 */
-	function __construct(array $items, $total=null, $offset=0)
+	function __construct(array $items, $total = null, $offset = 0)
 	{
 		$this->items  = $items;
 		$this->total  = $total === null ? count($items) : $total;

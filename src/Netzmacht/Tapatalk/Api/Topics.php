@@ -33,13 +33,13 @@ use Netzmacht\Tapatalk\Transport\MethodCallResponse;
 class Topics extends Api
 {
 
-	const SUBSCRIBE = 'subscribe_topic';
+	const SUBSCRIBE   = 'subscribe_topic';
 	const UNSUBSCRIBE = 'unsubscribe_topic';
 
 	const LIST_STICKY        = 'TOP';
 	const LIST_ANNOUNCEMENTS = 'ANN';
 
-	const STATE_PUBLISHED = 'published';
+	const STATE_PUBLISHED               = 'published';
 	const STATE_MOD_PUBLISHING_REQUIRED = 'moderator';
 
 
@@ -53,14 +53,14 @@ class Topics extends Api
 	 * @param null $mode
 	 * @return Topic[]|TopicResult
 	 */
-	public function getTopics($forumId, $limit=50, $offset=0, $mode=null)
+	public function getTopics($forumId, $limit = 50, $offset = 0, $mode = null)
 	{
 		$this->assertValidListMode($mode);
 
 		$request = $this->transport->createMethodCall('get_topic')
-			->set('forum_id', (string) $forumId)
+			->set('forum_id', (string)$forumId)
 			->set('start_num', $offset)
-			->set('last_num', $offset+$limit-1);
+			->set('last_num', $offset + $limit - 1);
 
 		if($mode) {
 			$request->set('mode', $mode);
@@ -83,7 +83,7 @@ class Topics extends Api
 	 * @param null $filters
 	 * @return TopicPostResult|TopicPost[]
 	 */
-	public function getUnreadTopicPosts($limit=50, $offset=0, $searchId=null, $filters=null)
+	public function getUnreadTopicPosts($limit = 50, $offset = 0, $searchId = null, $filters = null)
 	{
 		return $this->queryTopicPosts('get_unread_topic', $limit, $offset, $searchId, $filters);
 	}
@@ -99,7 +99,7 @@ class Topics extends Api
 	 * @param null $filters
 	 * @return TopicPostResult|TopicPost[]
 	 */
-	public function getLatestTopics($limit=50, $offset=0, $searchId=null, $filters=null)
+	public function getLatestTopics($limit = 50, $offset = 0, $searchId = null, $filters = null)
 	{
 		return $this->queryTopicPosts('get_latest_topic', $limit, $offset, $searchId, $filters);
 	}
@@ -134,12 +134,12 @@ class Topics extends Api
 	 * @param int $offset
 	 * @return Result|SubscribedTopic[]
 	 */
-	public function getSubscribed($limit=50, $offset=0)
+	public function getSubscribed($limit = 50, $offset = 0)
 	{
 		$response = $this->transport->call('get_subscribed_topic', array(
-				'start_num' => $offset,
-				'last_num'  => $limit+$offset-1
-			));
+			'start_num' => $offset,
+			'last_num'  => $limit + $offset - 1
+		));
 
 		$this->assert()->noResultState($response);
 		$topics = array();
@@ -156,11 +156,11 @@ class Topics extends Api
 	 * @param $topicId
 	 * @param string $mode
 	 */
-	public function subscribeTopic($topicId, $mode=Topics::SUBSCRIBE)
+	public function subscribeTopic($topicId, $mode = Topics::SUBSCRIBE)
 	{
 		$this->assertValidSubscribeMode($mode);
 
-		$response = $this->transport->call($mode, array('topic_id' => (string) $topicId));
+		$response = $this->transport->call($mode, array('topic_id' => (string)$topicId));
 		$this->assert()->resultSuccess($response);
 	}
 
@@ -189,20 +189,20 @@ class Topics extends Api
 	 * @param null $groupId
 	 * @return array
 	 */
-	public function createNewTopic($forumId, $subject, $body, $prefixId=null, array $attachmentIds=null, $groupId=null)
+	public function createNewTopic($forumId, $subject, $body, $prefixId = null, array $attachmentIds = null, $groupId = null)
 	{
 		$request = $this->transport->createMethodCall('new_topic')
-			->set('forum_id', (string) $forumId)
+			->set('forum_id', (string)$forumId)
 			->set('subject', $subject, true)
 			->set('body', $body, true);
 
 		if($prefixId || $attachmentIds) {
-			$request->set('prefix_id', (string) $prefixId);
+			$request->set('prefix_id', (string)$prefixId);
 		}
 
 		if($attachmentIds) {
 			$request->set('attachment_id_array', array_map('strval', $attachmentIds));
-			$request->set('group_id', (string) $groupId);
+			$request->set('group_id', (string)$groupId);
 		}
 
 		$response = $request->call();
@@ -222,15 +222,15 @@ class Topics extends Api
 	 * @param null $searchId
 	 * @return Result|TopicPost[]
 	 */
-	public function search($keywords, $limit=20, $offset=0, $searchId=null)
+	public function search($keywords, $limit = 20, $offset = 0, $searchId = null)
 	{
 		$request = $this->transport->createMethodCall('search_topic')
 			->set('search_string', $keywords, true)
 			->set('start_num', $offset)
-			->set('last_num', $limit+$offset-1);
+			->set('last_num', $limit + $offset - 1);
 
 		if($searchId) {
-			$request->set('search_id', (string) $searchId);
+			$request->set('search_id', (string)$searchId);
 		}
 
 		$response = $request->call();
@@ -247,7 +247,7 @@ class Topics extends Api
 	 * @param null $searchId
 	 * @return SearchResult
 	 */
-	public function advancedSearch(array $filters, $limit=20, $offset=20, $searchId=null)
+	public function advancedSearch(array $filters, $limit = 20, $offset = 20, $searchId = null)
 	{
 		$method = $this->transport->createMethodCall('search', array('filters' => array('showposts' => 0)));
 		AdvancedSearch::applyFilters($method, $filters, $limit, $offset, $searchId);
@@ -275,7 +275,7 @@ class Topics extends Api
 		);
 
 		if($searchId || $filters) {
-			$params['search_id'] = (string) $searchId;
+			$params['search_id'] = (string)$searchId;
 		}
 
 		$params   = $this->appendFilters($params, $filters);
@@ -319,7 +319,7 @@ class Topics extends Api
 			$compiled = array();
 			foreach($filters as $name => $ids) {
 				$this->assertValidFilterName($name);
-				$compiled[$name] = (array) $ids;
+				$compiled[$name] = (array)$ids;
 			}
 
 			$params['filters'] = $compiled;

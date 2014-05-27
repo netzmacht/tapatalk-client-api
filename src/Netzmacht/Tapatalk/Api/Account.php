@@ -184,21 +184,20 @@ class Account extends Api
 	 * @param $userId
 	 * @param bool $ignore
 	 */
-	public function ignoreUser($userId, $ignore=true)
+	public function ignoreUser($userId, $ignore = true)
 	{
 		$this->assertIsLoggedIn();
 
 		$this->transport->call('ignore_user', array(
-			'user_id' => (string) $userId,
-			'mode'    => $ignore ? 1 :0
+			'user_id' => (string)$userId,
+			'mode'    => $ignore ? 1 : 0
 		));
 
 		if(!$ignore && in_array($userId, $this->ignoredUserIds)) {
 			$key = array_search($userId, $this->ignoredUserIds);
 			unset($this->ignoredUserIds[$key]);
 			$this->ignoredUserIds = array_values($this->ignoredUserIds);
-		}
-		elseif($ignore && !in_array($userId, $this->ignoredUserIds)) {
+		} elseif($ignore && !in_array($userId, $this->ignoredUserIds)) {
 			$this->ignoredUserIds[] = $userId;
 		}
 	}
@@ -246,9 +245,9 @@ class Account extends Api
 	 * @param bool $markAllAlertsAsRead
 	 * @return static
 	 */
-	public function getDashboard($markAllAlertsAsRead=false)
+	public function getDashboard($markAllAlertsAsRead = false)
 	{
-		$params = array();
+		$params                    = array();
 		$params['alert_mark_read'] = $markAllAlertsAsRead;
 
 		if($markAllAlertsAsRead) {
@@ -267,7 +266,7 @@ class Account extends Api
 	 * @param int $offset
 	 * @return Result|\Netzmacht\Tapatalk\Api\Account\Alert[]
 	 */
-	public function getAlerts($limit=20, $offset=0)
+	public function getAlerts($limit = 20, $offset = 0)
 	{
 		$params = array(
 			'page'    => Pagination::getPage($limit, $offset),

@@ -86,7 +86,7 @@ class Post
 		return new static(
 			$response->get('post_id'),
 			$response->get('post_content', true),
-			DateTime::createFromTimestamp($response->get('post_time') ?: $response->get('timestamp')),
+			DateTime::createFromTimestamp($response->get('post_time') ? : $response->get('timestamp')),
 			$attachments,
 			$response->get('can_edit', false, true),
 			$response->get('can_delete', false, true)

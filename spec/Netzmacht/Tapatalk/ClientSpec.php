@@ -24,10 +24,10 @@ class ClientSpec extends ObjectBehavior
 		$this->beConstructedWith($transport);
 	}
 
-    function it_is_initializable()
-    {
-        $this->shouldHaveType('Netzmacht\Tapatalk\Client');
-    }
+	function it_is_initializable()
+	{
+		$this->shouldHaveType('Netzmacht\Tapatalk\Client');
+	}
 
 
 	function it_should_throw_exception_if_api_version_is_not_at_least_4(Transport $transport)

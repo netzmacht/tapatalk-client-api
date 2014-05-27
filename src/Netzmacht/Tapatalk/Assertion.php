@@ -90,8 +90,7 @@ class Assertion
 	{
 		if(strpos($message, 'not have permission') !== false) {
 			throw new PermissionDeniedException($message);
-		}
-		else {
+		} else {
 			throw new ResponseException($message);
 		}
 	}

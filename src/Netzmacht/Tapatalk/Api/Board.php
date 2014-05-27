@@ -77,7 +77,7 @@ class Board extends Api
 	 * @param int $offset
 	 * @return Result
 	 */
-	public function getActivity($limit=20, $offset=0)
+	public function getActivity($limit = 20, $offset = 0)
 	{
 		$this->assert()->featureSupported(Features::GET_ACTIVITY);
 

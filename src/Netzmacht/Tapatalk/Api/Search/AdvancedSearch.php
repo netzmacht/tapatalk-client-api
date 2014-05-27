@@ -10,6 +10,7 @@
  */
 
 namespace Netzmacht\Tapatalk\Api\Search;
+
 use Netzmacht\Tapatalk\Transport\MethodCall;
 use Netzmacht\Tapatalk\Transport\Serializer;
 use Netzmacht\Tapatalk\Util\Pagination;
@@ -20,25 +21,25 @@ use Netzmacht\Tapatalk\Util\Pagination;
  */
 class AdvancedSearch
 {
-	const SEARCH_ID  = 'searchid';
+	const SEARCH_ID = 'searchid';
 
-	const USERNAME   = 'searchuser';
+	const USERNAME = 'searchuser';
 
-	const KEYWORDS   = 'keywords';
+	const KEYWORDS = 'keywords';
 
-	const USER_ID    = 'userid';
+	const USER_ID = 'userid';
 
-	const FORUM_ID   = 'froumid';
+	const FORUM_ID = 'froumid';
 
-	const THREAD_ID  = 'threadid';
+	const THREAD_ID = 'threadid';
 
 	const TITLE_ONLY = 'titleonly';
 
 	const SEARCH_TIME = 'searchtime';
 
-	const ONLY_IN     = 'only_in';
+	const ONLY_IN = 'only_in';
 
-	const NOT_IN      = 'not_in';
+	const NOT_IN = 'not_in';
 
 
 	/**
@@ -47,6 +48,7 @@ class AdvancedSearch
 	public static function getFilters()
 	{
 		$reflector = new \ReflectionClass(get_called_class());
+
 		return array_flip(array_values($reflector->getConstants()));
 	}
 
@@ -60,17 +62,16 @@ class AdvancedSearch
 	 * @internal param array $filters
 	 * @return array
 	 */
-	public static function applyFilters(MethodCall $method, array $data, $limit=20, $offset=20, $searchId=null)
+	public static function applyFilters(MethodCall $method, array $data, $limit = 20, $offset = 20, $searchId = null)
 	{
-		$filters = array_merge((array) $method->getParam('filters'), array(
-			'page'      => Pagination::getPage($limit, $offset),
-			'perpage'   => $limit
+		$filters = array_merge((array)$method->getParam('filters'), array(
+			'page'    => Pagination::getPage($limit, $offset),
+			'perpage' => $limit
 		));
 
 		if($searchId) {
 			$filters['searchid'] = $searchId;
-		}
-		else {
+		} else {
 			$data       = array_intersect_key($data, static::getFilters());
 			$serializer = $method->getSerializer();
 

@@ -84,8 +84,8 @@ class fXmlRpcTransport extends Transport
 	 */
 	public function upload($path, $file, $params = array())
 	{
-		$fault    = false;
-		$parser   = new XmlReaderParser();
+		$fault  = false;
+		$parser = new XmlReaderParser();
 
 		$response = $this->uploadHandler->upload($params, $file, $params);
 		$response = $parser->parse($response, $fault);

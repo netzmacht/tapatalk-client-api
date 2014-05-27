@@ -178,8 +178,7 @@ class fxmlRpcTransportFactory
 	{
 		if(!$this->uploadHandler && $this->guzzle) {
 			$this->uploadHandler = new GuzzleUploadHandler($this->guzzle);
-		}
-		elseif(!$this->uploadHandler) {
+		} elseif(!$this->uploadHandler) {
 			throw new \RuntimeException('Not file uploader found');
 		}
 	}

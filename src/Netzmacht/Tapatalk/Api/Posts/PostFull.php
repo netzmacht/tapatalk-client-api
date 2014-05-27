@@ -98,7 +98,7 @@ class PostFull extends Post
 		return new static(
 			$response->get('post_id'),
 			$response->get('post_content', true),
-			DateTime::createFromTimestamp($response->get('post_time') ?: $response->get('timestamp')),
+			DateTime::createFromTimestamp($response->get('post_time') ? : $response->get('timestamp')),
 			$attachments,
 			$response->get('can_edit', false, true),
 			$response->get('can_delete', false, true),
@@ -151,11 +151,11 @@ class PostFull extends Post
 		foreach($response->get('likes_info', false, array()) as $like) {
 			$likes[] = new User($like->get('userid'), $like->get('username', true), null);
 		}
-		
+
 		return $likes;
 	}
 
-	
+
 	/**
 	 * @param MethodCallResponse $response
 	 * @return User[]

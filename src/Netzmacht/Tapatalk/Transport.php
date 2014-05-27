@@ -25,7 +25,7 @@ abstract class Transport implements UploadHandler
 	 * @param array $params
 	 * @return MethodCallResponse
 	 */
-	abstract public function call($method, $params=array());
+	abstract public function call($method, $params = array());
 
 
 	/**
@@ -44,6 +44,6 @@ abstract class Transport implements UploadHandler
 	 * @param array $params
 	 * @return MethodCall
 	 */
-	abstract public function createMethodCall($method, array $params=array());
+	abstract public function createMethodCall($method, array $params = array());
 
 } 

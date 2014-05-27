@@ -29,12 +29,11 @@ class Users extends Api
 	const USERNAME = 'user_name';
 	const USER_ID  = 'user_id';
 
-	const RECOMMENDED_ALL = 1;
+	const RECOMMENDED_ALL          = 1;
 	const RECOMMENDED_NON_TAPATALK = 2;
 
 	const REPUTATION_POSITIVE = 'ADD';
 	const REPUTATION_NEGATIVE = 'SUBTRACT';
-
 
 
 	/**
@@ -46,7 +45,7 @@ class Users extends Api
 	 * @param string $identifier
 	 * @return \Netzmacht\Tapatalk\Api\Users\UserInfo
 	 */
-	public function getUserInfo($userId, $identifier=Users::USER_ID)
+	public function getUserInfo($userId, $identifier = Users::USER_ID)
 	{
 		$this->assertValidIdentifier($identifier);
 
@@ -67,7 +66,7 @@ class Users extends Api
 	 * @param int $offset
 	 * @return Result|RecommendedUser[]
 	 */
-	public function getRecommendUsers($mode=Users::RECOMMENDED_ALL, $limit=50, $offset=0)
+	public function getRecommendUsers($mode = Users::RECOMMENDED_ALL, $limit = 50, $offset = 0)
 	{
 		$this->assertValidRecommendMode($mode);
 
@@ -91,7 +90,7 @@ class Users extends Api
 	 * @param int $offset
 	 * @return \Netzmacht\Tapatalk\Api\Users\OnlineUserResult|OnlineUser[]
 	 */
-	public function getOnlineUsers($limit=null, $offset=0)
+	public function getOnlineUsers($limit = null, $offset = 0)
 	{
 		$params = array();
 
@@ -108,9 +107,9 @@ class Users extends Api
 	 * @param int $offset
 	 * @return \Netzmacht\Tapatalk\Api\Users\OnlineUserResult|OnlineUser[]
 	 */
-	public function getForumOnlineUsers($id, $limit=null, $offset=0)
+	public function getForumOnlineUsers($id, $limit = null, $offset = 0)
 	{
-		$params = array('area' => 'forum', 'id' => (string) $id);
+		$params = array('area' => 'forum', 'id' => (string)$id);
 
 		return $this->queryOnlineUsers($limit, $offset, $params);
 	}
@@ -125,9 +124,9 @@ class Users extends Api
 	 * @param int $offset
 	 * @return \Netzmacht\Tapatalk\Api\Users\OnlineUserResult|OnlineUser[]
 	 */
-	public function getTopicOnlineUsers($id, $limit=null, $offset=0)
+	public function getTopicOnlineUsers($id, $limit = null, $offset = 0)
 	{
-		$params = array('area' => 'topic', 'id' => (string) $id);
+		$params = array('area' => 'topic', 'id' => (string)$id);
 
 		return $this->queryOnlineUsers($limit, $offset, $params);
 	}
@@ -141,7 +140,7 @@ class Users extends Api
 	 * @param int $offset
 	 * @return \Netzmacht\Tapatalk\Result|User[]
 	 */
-	public function search($keywords, $limit=20, $offset=0)
+	public function search($keywords, $limit = 20, $offset = 0)
 	{
 		$response = $this->transport->createMethodCall('search_user')
 			->set('keywords', $keywords, true)
@@ -164,11 +163,11 @@ class Users extends Api
 	 * @param $userId
 	 * @param bool $ignore
 	 */
-	public function ignoreUser($userId, $ignore=true)
+	public function ignoreUser($userId, $ignore = true)
 	{
 		$params = array(
-			'user_id' => (string) $userId,
-			'mode' => $ignore ? 1 : 0
+			'user_id' => (string)$userId,
+			'mode'    => $ignore ? 1 : 0
 		);
 
 		$response = $this->transport->call('ignore_user', $params);
@@ -185,10 +184,10 @@ class Users extends Api
 	 * @param int $userId
 	 * @param bool $follow
 	 */
-	public function followUser($userId, $follow=true)
+	public function followUser($userId, $follow = true)
 	{
 		$method = $follow ? 'follow' : 'unfollow';
-		$params = array('user_id' => (string) $userId);
+		$params = array('user_id' => (string)$userId);
 
 		$response = $this->transport->call($method, $params);
 		$this->assert()->resultSuccess($response);
@@ -237,12 +236,12 @@ class Users extends Api
 	 * @param $userId
 	 * @param string $reputation
 	 */
-	public function changeUserReputation($userId, $reputation=Users::REPUTATION_POSITIVE)
+	public function changeUserReputation($userId, $reputation = Users::REPUTATION_POSITIVE)
 	{
 		$this->assertValidReputationMode($reputation);
 
 		$params = array(
-			'user_id' => (string) $userId,
+			'user_id' => (string)$userId,
 			'mode'    => $reputation
 		);
 
@@ -258,26 +257,25 @@ class Users extends Api
 	 * @param bool $asString
 	 * @return array
 	 */
-	private function addPagination($limit, $offset, $params=array(), $asString=false)
+	private function addPagination($limit, $offset, $params = array(), $asString = false)
 	{
 		if($limit !== null) {
 			$params['perpage'] = $limit;
-			$params['page']    = abs($offset/$limit);
+			$params['page']    = abs($offset / $limit);
 
 			if($offset !== null) {
-				$params['page'] = abs($offset/$limit);
+				$params['page'] = abs($offset / $limit);
 
 				if($params['page'] < 1) {
 					$params['page'] = 1;
 				}
-			}
-			else {
+			} else {
 				$params['page'] = 1;
 			}
 
 			if($asString) {
-				$params['page'] = (string) $params['page'];
-				$params['perpage'] = (string) $params['perpage'];
+				$params['page']    = (string)$params['page'];
+				$params['perpage'] = (string)$params['perpage'];
 			}
 		}
 
@@ -291,7 +289,7 @@ class Users extends Api
 	 * @param array $params
 	 * @return OnlineUserResult
 	 */
-	private function queryOnlineUsers($limit, $offset, $params=array())
+	private function queryOnlineUsers($limit, $offset, $params = array())
 	{
 		if($limit) {
 			$params = $this->addPagination($limit, $offset, $params, true);

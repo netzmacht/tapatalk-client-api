@@ -12,6 +12,7 @@
 namespace Netzmacht\Tapatalk\Api;
 
 
-class Attachments {
+class Attachments
+{
 
 } 

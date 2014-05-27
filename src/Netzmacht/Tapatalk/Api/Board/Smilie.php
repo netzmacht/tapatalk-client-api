@@ -57,7 +57,7 @@ class Smilie
 	 * @param $category
 	 * @return static
 	 */
-	public static function fromResponse(MethodCallResponse $response, $category=null)
+	public static function fromResponse(MethodCallResponse $response, $category = null)
 	{
 		return new static(
 			$response->get('code', true),
