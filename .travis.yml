@@ -6,7 +6,8 @@ php:
   - "5.5"
 
 install:
-  - composer install --prefer-source --dev
+  - composer self-update
+  - composer install --prefer-dist --dev
 
 script:
   - ./bin/phpspec run -fpretty
