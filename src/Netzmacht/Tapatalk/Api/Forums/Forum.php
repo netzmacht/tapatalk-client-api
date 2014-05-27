@@ -54,7 +54,7 @@ class Forum
 		$this->name        = $name;
 		$this->logo        = $logo;
 		$this->isProtected = $isProtected;
-		$this->hasNewPosts  = $hasNewPosts;
+		$this->hasNewPosts = $hasNewPosts;
 	}
 
 

@@ -161,22 +161,22 @@ class Account extends Api
 	 * @param null $password
 	 * @return LoginByTapatalkIdResult
 	 */
-	public function loginByTapatalkId($token, $code, $email=null, $username=null, $password=null)
+	public function loginByTapatalkId($token, $code, $email = null, $username = null, $password = null)
 	{
 		$method = $this->transport->createMethodCall('sign_in')
 			->set('token', $token)
 			->set('code', $code);
 
 		if($email || $username || $password) {
-			$method->set('email', (string) $email, true);
+			$method->set('email', (string)$email, true);
 		}
 
 		if($username || $password) {
-			$method->set('username', (string) $username, true);
+			$method->set('username', (string)$username, true);
 		}
 
 		if($password) {
-			$method->set('password', (string) $password, true);
+			$method->set('password', (string)$password, true);
 		}
 
 		$response = $method->call();
@@ -273,7 +273,7 @@ class Account extends Api
 	public function updateAvatar()
 	{
 		// TODO: Implement
-		trigger_error('Not implemented: ' . __METHOD__ , E_USER_ERROR);
+		trigger_error('Not implemented: ' . __METHOD__, E_USER_ERROR);
 	}
 
 
@@ -288,7 +288,7 @@ class Account extends Api
 	 * @param null $code
 	 * @return mixed|MethodCallResponse|Transport\MethodCallResponse[]
 	 */
-	public function registerUser($username, $password, $email, $token=null, $code=null)
+	public function registerUser($username, $password, $email, $token = null, $code = null)
 	{
 		$method = $this->transport->createMethodCall('register')
 			->set('username', $username, true)

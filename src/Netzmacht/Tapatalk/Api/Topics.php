@@ -33,7 +33,7 @@ use Netzmacht\Tapatalk\Transport\MethodCallResponse;
  */
 class Topics extends Api
 {
-	const UNSUBSCRIBE_ALL    = 'ALL';
+	const UNSUBSCRIBE_ALL = 'ALL';
 
 	const LIST_STICKY        = 'TOP';
 	const LIST_ANNOUNCEMENTS = 'ANN';

@@ -31,12 +31,12 @@ class Pagination
 	 * @param $page
 	 * @return int
 	 */
-	public function getOffset($limit, $page=1)
-    {
-	    if($page < 1) {
-		    $page = 1;
-	    }
+	public function getOffset($limit, $page = 1)
+	{
+		if($page < 1) {
+			$page = 1;
+		}
 
-	    return (($page-1) * $limit);
-    }
+		return (($page - 1) * $limit);
+	}
 }

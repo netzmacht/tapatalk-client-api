@@ -111,10 +111,10 @@ class Assertion
 	 */
 	private function shortenServerMessage($message)
 	{
-		$maxlength = (int) ini_get('log_errors_max_len') * static::MAX_LENGTH_QUOTA;
+		$maxlength = (int)ini_get('log_errors_max_len') * static::MAX_LENGTH_QUOTA;
 
 		if(strlen($message) > $maxlength) {
-			$message = substr($message, 0, $maxlength-3) . '...';
+			$message = substr($message, 0, $maxlength - 3) . '...';
 		}
 
 		return $message;

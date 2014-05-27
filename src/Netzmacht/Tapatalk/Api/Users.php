@@ -259,15 +259,15 @@ class Users extends Api
 	 * @param $code
 	 * @return bool
 	 */
-	public function requestPasswordReset($username, $taptalkId=null, $code=null)
+	public function requestPasswordReset($username, $taptalkId = null, $code = null)
 	{
 		$method = $this->transport->createMethodCall('forget_password')
 			->set('username', $username, true);
 
 		if($taptalkId) {
 			$method
-				->set('token', (string) $taptalkId)
-				->set('code', (string) $code);
+				->set('token', (string)$taptalkId)
+				->set('code', (string)$code);
 		}
 
 		$response = $method->call();

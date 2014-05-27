@@ -82,7 +82,7 @@ class Config
 	 */
 	public static function fromResponse(MethodCallResponse $response)
 	{
-		$passwordEncryption = (bool) $response->get('support_sha1') ?: ($response->get('support_md5') ? : null);
+		$passwordEncryption = (bool)$response->get('support_sha1') ? : ($response->get('support_md5') ? : null);
 
 		return new static(
 			$response->get('sys_version'),
@@ -125,7 +125,7 @@ class Config
 		$features = array();
 
 		foreach(Features::getFeatures() as $feature) {
-			$features[$feature] = (bool) $response->get($feature, false, Features::getDefaultValue($feature));
+			$features[$feature] = (bool)$response->get($feature, false, Features::getDefaultValue($feature));
 		}
 
 		return $features;
