@@ -218,14 +218,12 @@ class Users extends Api
 	}
 
 	/**
-	 * @throws \Netzmacht\Tapatalk\Exception\NotImplementedException
+	 *
 	 */
 	public function downloadAvatar()
 	{
-		//$this->assert()->featureSupported(Config::FEATURE_DOWNLOAD_AVATAR);
-
 		// TODO: Implement
-		throw new NotImplementedException('Users::downloadAvatar is not implemented');
+		trigger_error('Not implemented: ' . __METHOD__, E_USER_ERROR);
 	}
 
 
@@ -247,6 +245,31 @@ class Users extends Api
 
 		$response = $this->transport->call('set_reputation', $params);
 		$this->assert()->resultSuccess($response);
+	}
+
+
+	/**
+	 * @see http://tapatalk.com/api/api_section.php?id=12#sign_in
+	 * @param $username
+	 * @param $taptalkId
+	 * @param $code
+	 * @return bool
+	 */
+	public function requestPasswordReset($username, $taptalkId=null, $code=null)
+	{
+		$method = $this->transport->createMethodCall('forget_password')
+			->set('username', $username, true);
+
+		if($taptalkId) {
+			$method
+				->set('token', (string) $taptalkId)
+				->set('code', (string) $code);
+		}
+
+		$response = $method->call();
+		$this->assert()->resultSuccess($response);
+
+		return $response->get('verified');
 	}
 
 

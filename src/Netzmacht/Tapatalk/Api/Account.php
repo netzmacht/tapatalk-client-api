@@ -117,6 +117,16 @@ class Account extends Api
 	 */
 	private $loginName;
 
+	/**
+	 * @var string
+	 */
+	private $tapatalkId;
+
+	/**
+	 * @var string
+	 */
+	private $tapatalkCode;
+
 
 	/**
 	 * @param $username
@@ -141,12 +151,15 @@ class Account extends Api
 
 
 	/**
+	 * Login by tapatalk id. This will auto register user if not exists
+	 *
 	 * @see http://tapatalk.com/api/api_section.php?id=12#sign_in
 	 * @param $token
 	 * @param $code
 	 * @param null $email
 	 * @param null $username
 	 * @param null $password
+	 * @return LoginByTapatalkIdResult
 	 */
 	public function loginByTapatalkId($token, $code, $email=null, $username=null, $password=null)
 	{
@@ -174,6 +187,9 @@ class Account extends Api
 			$this->loadPermission($response);
 			$this->loadImageSizeDefinitions($response);
 
+			$this->tapatalkId   = $token;
+			$this->tapatalkCode = $code;
+
 			$this->loggedIn = true;
 		}
 
@@ -193,21 +209,73 @@ class Account extends Api
 	}
 
 
-	public function requestPasswordReset()
+	/**
+	 * Update password of current user
+	 *
+	 * @param http://tapatalk.com/api/api_section.php?id=12#update_password
+	 * @param $oldPassword
+	 * @param $newPassword
+	 */
+	public function updatePassword($oldPassword, $newPassword)
 	{
+		$this->assertIsLoggedIn();
 
+		$response = $this->transport->createMethodCall('update_password')
+			->set('old_password', $oldPassword, true)
+			->set('new_password', $newPassword, true)
+			->call();
+
+		$this->assert()->resultSuccess($response);
 	}
 
-	public function updatePassword()
+	/**
+	 * Update password of current user. If the user has logged in by tapatalk id, the confirmation of the current
+	 * password is not required
+	 *
+	 * @param http://tapatalk.com/api/api_section.php?id=12#update_password
+	 * @param $newPassword
+	 */
+	public function updatePasswordByTapatalkId($newPassword)
 	{
+		$this->assertLoggedInByTapatalkId();
 
+		$response = $this->transport->createMethodCall('update_password')
+			->set('new_password', $newPassword, true)
+			->set('token', $this->tapatalkId)
+			->set('code', $this->tapatalkCode)
+			->call();
+
+		$this->assert()->resultSuccess($response);
 	}
 
 
+	/**
+	 * Update email of user account. Current forum password ist required
+	 *
+	 * @see http://tapatalk.com/api/api_section.php?id=12#update_email
+	 * @param string $newEmail
+	 * @param string $password
+	 */
+	public function updateEmail($newEmail, $password)
+	{
+		$response = $this->transport->createMethodCall('update_email')
+			->set('password', $password, true)
+			->set('new_email', $newEmail, true)
+			->call();
+
+		$this->assert()->resultSuccess($response);
+	}
+
+
+	/**
+	 * @see http://tapatalk.com/api/api_section.php?id=12#update_avatar
+	 */
 	public function updateAvatar()
 	{
-
+		// TODO: Implement
+		trigger_error('Not implemented: ' . __METHOD__ , E_USER_ERROR);
 	}
+
 
 	/**
 	 * Register a new user
@@ -524,6 +592,18 @@ class Account extends Api
 	{
 		if(!$this->loggedIn) {
 			throw new Api\Exception\PermissionDeniedException('User is not logged in');
+		}
+	}
+
+	/**
+	 * @throws Exception\PermissionDeniedException
+	 */
+	private function assertLoggedInByTapatalkId()
+	{
+		$this->assertIsLoggedIn();
+
+		if(!$this->tapatalkId || !$this->tapatalkCode) {
+			throw new Api\Exception\PermissionDeniedException('User was not logged in by tapatalk id');
 		}
 	}
 
