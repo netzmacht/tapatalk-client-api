@@ -130,6 +130,12 @@ class Account extends Api
 	}
 
 
+	public function loginByTapatalkId()
+	{
+
+	}
+
+
 	/**
 	 * Logout the user
 	 */
@@ -139,6 +145,29 @@ class Account extends Api
 
 		$this->loggedIn = false;
 		$this->transport->call('logout_user');
+	}
+
+
+	public function requestPasswordReset()
+	{
+
+	}
+
+	public function updatePasswort()
+	{
+
+	}
+
+
+	public function updateAvatar()
+	{
+
+	}
+
+
+	public function register()
+	{
+
 	}
 
 
