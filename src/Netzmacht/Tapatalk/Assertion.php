@@ -20,6 +20,8 @@ use Netzmacht\Tapatalk\Transport\MethodCallResponse;
 
 class Assertion
 {
+	const MAX_LENGTH_QUOTA = 0.13;
+
 	/**
 	 * @var Config
 	 */
@@ -41,7 +43,8 @@ class Assertion
 	public function noResultState(MethodCallResponse $response)
 	{
 		if($response->has('result') && !$response->get('result')) {
-			$this->createException($response->get('result_text', true));
+			$message = $this->shortenServerMessage($response->get('result_text', true));
+			$this->createException($message);
 		}
 	}
 
@@ -52,7 +55,8 @@ class Assertion
 	public function resultSuccess(MethodCallResponse $response)
 	{
 		if(!$response->get('result')) {
-			$this->createException($response->get('result_text', true));
+			$message = $this->shortenServerMessage($response->get('result_text', true));
+			$this->createException($message);
 		}
 	}
 
@@ -100,6 +104,20 @@ class Assertion
 		if(!$this->config->isPushTypeEnabled($type)) {
 			throw new DisabledPushTypeException('Push type "' . $type . ' " is not enabled.');
 		}
+	}
+
+	/**
+	 * @param $get
+	 */
+	private function shortenServerMessage($message)
+	{
+		$maxlength = (int) ini_get('log_errors_max_len') * static::MAX_LENGTH_QUOTA;
+
+		if(strlen($message) > $maxlength) {
+			$message = substr($message, 0, $maxlength-3) . '...';
+		}
+
+		return $message;
 	}
 
 } 
