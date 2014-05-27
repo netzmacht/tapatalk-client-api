@@ -1,4 +1,5 @@
 language: php
+
 php:
     - "5.3"
     - "5.4"
@@ -8,4 +9,4 @@ install:
   - composer install --prefer-dist --dev
 
 script:
-  - bin/phpspec run
+  - ./bin/phpspec run -fpretty
