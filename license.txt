@@ -1,0 +1,8 @@
+/**
+ * PHP version 5
+ * @package    tapatalk-client-api
+ * @author     David Molineus <david.molineus@netzmacht.de>
+ * @copyright  netzmacht creative David Molineus
+ * @license    LGPL 3.0
+ * @filesource
+ */
