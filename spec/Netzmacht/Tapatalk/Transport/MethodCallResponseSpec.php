@@ -11,7 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 class MethodCallResponseSpec extends ObjectBehavior
 {
-	const NAME = 'test';
+	const NAME    = 'test';
 	const BOOLEAN = true;
 
 	private $data;
@@ -19,19 +19,19 @@ class MethodCallResponseSpec extends ObjectBehavior
 	function let()
 	{
 		$this->data = array(
-			'name' => Base64::serialize(static::NAME),
-			'test' => static::BOOLEAN,
-			'null' => null,
+			'name'  => Base64::serialize(static::NAME),
+			'test'  => static::BOOLEAN,
+			'null'  => null,
 			'false' => false
 		);
 
 		$this->beConstructedWith(new fXmlRpcSerializer(), $this->data);
 	}
 
-    function it_is_initializable()
-    {
-        $this->shouldHaveType('Netzmacht\Tapatalk\Transport\MethodCallResponse');
-    }
+	function it_is_initializable()
+	{
+		$this->shouldHaveType('Netzmacht\Tapatalk\Transport\MethodCallResponse');
+	}
 
 	function it_should_convert_base64_values()
 	{
@@ -85,10 +85,18 @@ class MethodCallResponseSpec extends ObjectBehavior
 
 	function it_should_get_data_deserialized()
 	{
-		$data = $this->data;
+		$data         = $this->data;
 		$data['name'] = static::NAME;
 
-		$this->getData(false)->shouldReturn($data);
+		$this->getData(true)->shouldReturn($data);
+	}
+
+	function it_should_not_get_data_deserialized()
+	{
+		$data         = $this->data;
+		$data['name'] = static::NAME;
+
+		$this->getData(false)->shouldNotReturn($data);
 	}
 
 }
