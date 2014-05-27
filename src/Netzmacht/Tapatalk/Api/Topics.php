@@ -33,9 +33,6 @@ use Netzmacht\Tapatalk\Transport\MethodCallResponse;
 class Topics extends Api
 {
 
-	const SUBSCRIBE   = 'subscribe_topic';
-	const UNSUBSCRIBE = 'unsubscribe_topic';
-
 	const LIST_STICKY        = 'TOP';
 	const LIST_ANNOUNCEMENTS = 'ANN';
 
@@ -153,16 +150,26 @@ class Topics extends Api
 
 
 	/**
+	 * @see http://tapatalk.com/api/api_section.php?id=6#subscribe_topic
 	 * @param $topicId
-	 * @param string $mode
 	 */
-	public function subscribeTopic($topicId, $mode = Topics::SUBSCRIBE)
+	public function subscribeTopic($topicId)
 	{
-		$this->assertValidSubscribeMode($mode);
-
-		$response = $this->transport->call($mode, array('topic_id' => (string)$topicId));
+		$response = $this->transport->call('subscribe_topic', array('topic_id' => (string)$topicId));
 		$this->assert()->resultSuccess($response);
 	}
+
+
+	/**
+	 * @see http://tapatalk.com/api/api_section.php?id=6#unsubscribe_topic
+	 * @param $topicId
+	 */
+	public function unsubscribeTopic($topicId)
+	{
+		$response = $this->transport->call('unsubscribe_topic', array('topic_id' => (string)$topicId));
+		$this->assert()->resultSuccess($response);
+	}
+
 
 	/**
 	 * Mark given topics as read
@@ -326,18 +333,6 @@ class Topics extends Api
 		}
 
 		return $params;
-	}
-
-
-	/**
-	 * @param $mode
-	 * @throws \InvalidArgumentException
-	 */
-	private function assertValidSubscribeMode($mode)
-	{
-		if($mode != static::SUBSCRIBE && $mode != static::UNSUBSCRIBE) {
-			throw new \InvalidArgumentException('Invalid subscribe mode given: ' . $mode);
-		}
 	}
 
 
