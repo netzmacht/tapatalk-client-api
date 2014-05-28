@@ -101,7 +101,7 @@ class Factory
 
 
 	/**
-	 * @return mixed
+	 * @return string
 	 */
 	public function getUri()
 	{

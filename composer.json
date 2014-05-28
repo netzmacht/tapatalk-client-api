@@ -4,7 +4,7 @@
     "type": "library",
     "description": "Tapatalk client library",
     "autoload": {
-        "psr-0": { "": "src/" }
+        "psr-0": { "Netzmacht\\Tapatalk\\": "src/" }
     },
     "require": {
         "php": ">=5.3.3",
