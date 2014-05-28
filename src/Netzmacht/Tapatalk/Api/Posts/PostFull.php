@@ -120,7 +120,7 @@ class PostFull extends Post
 	{
 		return new User(
 			$response->get('post_author_id'),
-			$response->get('post_autor_name'),
+			$response->get('post_author_name', true),
 			$response->get('icon_url')
 		);
 	}
