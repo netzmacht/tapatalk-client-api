@@ -230,7 +230,7 @@ class TopicResult extends Result
 	{
 		$prefixes = array();
 
-		foreach((array)$response->get('prefixes') as $prefix) {
+		foreach($response->get('prefixes') as $prefix) {
 			$id    = $prefix->get('prefix_id', true);
 			$label = $prefix->get('prefix_display_name', true);
 
