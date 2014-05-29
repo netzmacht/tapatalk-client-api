@@ -38,7 +38,7 @@ class Topic extends TopicBase
 			$response->get('topic_title', true),
 			$response->get('short_content', true),
 			$author,
-			DateTime::createFromTimestamp($response->get('last_reply_time')),
+			DateTime::createFromTimestamp($response->get('last_reply_time') ?: $response->get('timestamp')),
 			$response->get('new_post', false, false),
 			$response->get('prefix', true),
 			$response->get('is_subscribed', false, false),
