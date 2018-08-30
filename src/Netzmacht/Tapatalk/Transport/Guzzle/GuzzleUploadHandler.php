@@ -11,7 +11,7 @@
 
 namespace Netzmacht\Tapatalk\Transport\Guzzle;
 
-use Guzzle\Http\Client;
+use GuzzleHttp\Client;
 
 /**
  * Class GuzzleUploadHandler
@@ -47,13 +47,17 @@ class GuzzleUploadHandler
 			'file'    => fopen($file, 'r'),
 		));
 
-		$request = $this->client
-			->post($path, $params)
-			->setHeader('Content-Disposition', 'form-data; name="group_id');
+		$response = $this->client->post(
+			$path,
+			[
+				'form_params' => $params,
+				'headers' => [
+					'Content-Disposition' => 'form-data; name="group_id'
+				]
+			]
+		);
 
-		$response = $this->client->send($request);
-
-		return (string)$response->getBody();
+		return $response->getBody()->getContents();
 	}
 
 

@@ -7,13 +7,14 @@
         "psr-0": { "Netzmacht\\Tapatalk\\": "src/" }
     },
     "require": {
-        "php": ">=5.3.3",
-        "lstrojny/fxmlrpc": "0.9.2",
-        "guzzle/guzzle": "~3.8"
+        "php": ">=7.1",
+        "lstrojny/fxmlrpc": "^0.14.0",
+        "guzzlehttp/guzzle": "^6.3",
+        "php-http/guzzle6-adapter": "^1.1",
+        "php-http/message": "^1.7"
     },
     "require-dev": {
-        "phpspec/phpspec": "dev-develop",
-        "jameshalsall/licenser": "dev-master"
+        "phpspec/phpspec": "dev-develop"
     },
     "config": {
         "bin-dir": "bin"

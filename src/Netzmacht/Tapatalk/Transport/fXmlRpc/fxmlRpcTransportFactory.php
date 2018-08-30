@@ -12,11 +12,11 @@
 namespace Netzmacht\Tapatalk\Transport\fXmlRpc;
 
 use fXmlRpc\Client;
-use fXmlRpc\Transport\GuzzleBridge;
+use fXmlRpc\Transport\HttpAdapterTransport;
 use fXmlRpc\Transport\TransportInterface;
-use Guzzle\Http\Client as GuzzleClient;
-use Guzzle\Plugin\Cookie\CookieJar\ArrayCookieJar;
-use Guzzle\Plugin\Cookie\CookiePlugin;
+use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Cookie\CookieJar;
+use Http\Message\MessageFactory\GuzzleMessageFactory;
 use Netzmacht\Tapatalk\Transport\Guzzle\GuzzleUploadHandler;
 use Netzmacht\Tapatalk\Transport\Serializer;
 use Netzmacht\Tapatalk\Transport\UploadHandler;
@@ -46,7 +46,7 @@ class fxmlRpcTransportFactory
 	/**
 	 * @var GuzzleClient
 	 */
-	private $guzzle;
+	private $httpClient;
 
 	/**
 	 * @var Serializer
@@ -90,19 +90,19 @@ class fxmlRpcTransportFactory
 	}
 
 	/**
-	 * @param \Guzzle\Http\Client $guzzle
+	 * @param GuzzleClient $httpClient
 	 */
-	public function setGuzzle($guzzle)
+	public function setHttpClient($httpClient)
 	{
-		$this->guzzle = $guzzle;
+		$this->httpClient = $httpClient;
 	}
 
 	/**
-	 * @return \Guzzle\Http\Client
+	 * @return GuzzleClient
 	 */
-	public function getGuzzle()
+	public function getHttpClient()
 	{
-		return $this->guzzle;
+		return $this->httpClient;
 	}
 
 	/**
@@ -123,7 +123,7 @@ class fxmlRpcTransportFactory
 
 
 	/**
-	 * @param \Netzmacht\Tapatalk\Transport\UploadHandler $uploadHandler
+	 * @param UploadHandler $uploadHandler
 	 */
 	public function setUploadHandler($uploadHandler)
 	{
@@ -132,7 +132,7 @@ class fxmlRpcTransportFactory
 
 
 	/**
-	 * @return \Netzmacht\Tapatalk\Transport\UploadHandler
+	 * @return UploadHandler
 	 */
 	public function getUploadHandler()
 	{
@@ -159,13 +159,13 @@ class fxmlRpcTransportFactory
 	private function createHttpTransport()
 	{
 		if(!$this->httpTransport) {
-			$guzzle = new GuzzleClient();
-			$cookie = new CookiePlugin(new ArrayCookieJar());
-			$guzzle->addSubscriber($cookie);
+			$client    = new GuzzleClient(['cookies' => new CookieJar()]);
+			$transport = new HttpAdapterTransport(
+				new GuzzleMessageFactory(),
+				new \Http\Adapter\Guzzle6\Client($client)
+			);
 
-			$transport = new GuzzleBridge($guzzle);
-
-			$this->guzzle        = $guzzle;
+			$this->httpClient    = $client;
 			$this->httpTransport = $transport;
 		}
 	}
@@ -176,8 +176,8 @@ class fxmlRpcTransportFactory
 	 */
 	private function createHttpUploadHandler()
 	{
-		if(!$this->uploadHandler && $this->guzzle) {
-			$this->uploadHandler = new GuzzleUploadHandler($this->guzzle);
+		if(!$this->uploadHandler && $this->httpClient) {
+			$this->uploadHandler = new GuzzleUploadHandler($this->httpClient);
 		} elseif(!$this->uploadHandler) {
 			throw new \RuntimeException('Not file uploader found');
 		}
