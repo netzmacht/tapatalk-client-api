@@ -267,11 +267,11 @@ class Posts extends Api
 	 */
 	public function replyTo($forumId, $topicId, $body, $subject = null, $attachmentIds = null, $groupId = null)
 	{
-		$request = $this->transport->createMethodCall('replay_post')
+		$request = $this->transport->createMethodCall('reply_post')
 			->set('forum_id', (string)$forumId)
 			->set('topic_id', (string)$topicId)
 			->set('subject', $subject, true)
-			->set('tex_body', $body);
+			->set('tex_body', $body, true);
 
 		if($attachmentIds) {
 			$request->set('attachment_id_array', array_map('strval', (array)$attachmentIds));
