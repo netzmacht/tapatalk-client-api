@@ -22,7 +22,6 @@ use Netzmacht\Tapatalk\Api\Posts\RawPost;
 use Netzmacht\Tapatalk\Api\Posts\SearchPost;
 use Netzmacht\Tapatalk\Api\Search\AdvancedSearch;
 use Netzmacht\Tapatalk\Api\Search\SearchResult;
-use Netzmacht\Tapatalk\Transport;
 
 
 class Posts extends Api
@@ -271,7 +270,7 @@ class Posts extends Api
 			->set('forum_id', (string)$forumId)
 			->set('topic_id', (string)$topicId)
 			->set('subject', $subject, true)
-			->set('tex_body', $body, true);
+			->set('text_body', $body, true);
 
 		if($attachmentIds) {
 			$request->set('attachment_id_array', array_map('strval', (array)$attachmentIds));
@@ -282,7 +281,7 @@ class Posts extends Api
 		$this->assert()->resultSuccess($response);
 
 		return array(
-			'post'  => Post::fromResponse($this->transport, $response),
+			'post'  => Post::fromResponse($response),
 			'state' => $response->get('state') ? static::STATE_MOD_PUBLISHING_REQUIRED : static::STATE_PUBLISHED
 		);
 	}
