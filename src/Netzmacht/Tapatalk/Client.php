@@ -19,6 +19,7 @@ use Netzmacht\Tapatalk\Api\Config;
 use Netzmacht\Tapatalk\Api\Exception\ApiServiceNotAvailableException;
 use Netzmacht\Tapatalk\Api\Exception\ApiVersionNotSupportedException;
 use Netzmacht\Tapatalk\Api\Forums;
+use Netzmacht\Tapatalk\Api\Moderation;
 use Netzmacht\Tapatalk\Api\Posts;
 use Netzmacht\Tapatalk\Api\Users;
 use Netzmacht\Tapatalk\Api\Topics;
@@ -176,15 +177,12 @@ class Client extends Api
 	/**
 	 * Moderation API
 	 *
-	 * Not implemented yet
-	 *
 	 * @return Moderation
 	 * @throws
 	 */
-	public function moderation()
+	public function moderation(): Moderation
 	{
-		// TODO: Implement
-		trigger_error('Not implemented: ' . __METHOD__, E_USER_ERROR);
+	    return new Moderation($this->transport, $this->config());
 	}
 
 
