@@ -550,13 +550,13 @@ class Account extends Api
 	private function loadAttributes(MethodCallResponse $response)
 	{
 		$this->id             = $response->get('user_id');
-		$this->username       = $response->get('username');
-		$this->loginName      = $response->get('login_name');
+		$this->username       = $response->get('username', true);
+		$this->loginName      = $response->get('login_name', true);
 		$this->groupIds       = $response->get('usergroup_id');
 		$this->email          = $response->get('email', true);
 		$this->avatar         = $response->get('icon_url');
 		$this->posts          = $response->get('post_count');
-		$this->type           = $response->get('user_type');
+		$this->type           = $response->get('user_type', true);
 		$this->maxAttachments = $response->get('max_attachments');
 		$this->ignoredUserIds = array_filter(explode(',', $response->get('ignored_uids')));
 	}
