@@ -1,15 +1,12 @@
 {
     "name": "netzmacht/tapatalk-client-api",
-    "license": "MIT",
     "type": "library",
     "description": "Tapatalk client library",
-    "autoload": {
-        "psr-0": { "Netzmacht\\Tapatalk\\": "src/" }
-    },
+    "license": "MIT",
     "require": {
         "php": ">=7.1",
-        "lstrojny/fxmlrpc": "^0.14.0",
         "guzzlehttp/guzzle": "^6.3",
+        "lstrojny/fxmlrpc": "^0.14.0",
         "php-http/guzzle6-adapter": "^1.1",
         "php-http/message": "^1.7"
     },
@@ -19,6 +16,10 @@
     "config": {
         "bin-dir": "bin"
     },
-    "extra": {
+    "extra": {},
+    "autoload": {
+        "psr-0": {
+            "Netzmacht\\Tapatalk\\": "src/"
+        }
     }
 }
