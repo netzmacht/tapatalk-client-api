@@ -1,13 +1,35 @@
+dist: xenial
+
+addons:
+  apt:
+    packages:
+      - ant-optional
+
 language: php
 
 php:
-  - "5.3"
-  - "5.4"
-  - "5.5"
+  - "7.3"
+  - "7.2"
+  - "7.1"
+  - "7.4snapshot"
+  - "nightly"
 
-install:
-  - composer self-update
-  - composer install --dev
+matrix:
+  exclude:
+  allow_failures:
+    - php: "nightly"
+    - php: "7.4snapshot"
 
-script:
-  - ./bin/phpspec run -fpretty
+before_script:
+  - echo "memory_limit=-1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+  - travis_retry composer self-update && composer --version
+  - travis_retry composer update --prefer-dist --no-interaction
+
+script: ./bin/phpspec run -fpretty
+
+git:
+  depth: 2147483647
+
+cache:
+  directories:
+    - vendor
